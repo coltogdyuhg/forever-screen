@@ -162,11 +162,11 @@
             </div>
         </header>
 
-        <!-- Middle Content Area (Clock distinctly on Left, Countdowns on Right) -->
-        <main class="flex-1 grid grid-cols-1 md:grid-cols-2 items-center justify-between my-auto px-4 md:px-12 lg:px-16 gap-8 lg:gap-24 z-10 w-full max-w-none">
+        <!-- Middle Content Area (Clock & Countdowns meeting near the middle) -->
+        <main class="flex-1 grid grid-cols-1 md:grid-cols-2 items-center justify-center my-auto px-4 md:px-6 gap-6 md:gap-10 lg:gap-14 z-10 w-full max-w-6xl mx-auto">
 
-            <!-- Left Side: Digital Clock & Date -->
-            <div id="clockContainer" class="flex flex-col items-center md:items-start text-center md:text-left transition-all w-full max-w-xl">
+            <!-- Left Side of Center: Digital Clock & Date -->
+            <div id="clockContainer" class="flex flex-col items-center md:items-end text-center md:text-right transition-all w-full">
                 <div id="timeDisplay" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none whitespace-nowrap">
                     00:00:00
                 </div>
@@ -175,11 +175,11 @@
                 </div>
             </div>
 
-            <!-- Right Side: Event Countdowns -->
-            <div id="countdownContainer" class="flex flex-col items-center md:items-end space-y-4 md:space-y-5 w-full">
+            <!-- Right Side of Center: Event Countdowns -->
+            <div id="countdownContainer" class="flex flex-col items-center md:items-start space-y-4 md:space-y-5 w-full">
 
                 <!-- Countdown 1: Christmas -->
-                <div class="countdown-card w-full max-w-sm lg:max-w-md bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm hover:bg-white/10 transition-all">
+                <div class="countdown-card w-full max-w-sm bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm hover:bg-white/10 transition-all">
                     <div class="flex justify-between items-center mb-1">
                         <span id="xmasLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
                             <i class="fa-solid fa-tree"></i> Christmas Countdown
@@ -192,7 +192,7 @@
                 </div>
 
                 <!-- Countdown 2: Halloween -->
-                <div class="countdown-card w-full max-w-sm lg:max-w-md bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm hover:bg-white/10 transition-all">
+                <div class="countdown-card w-full max-w-sm bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm hover:bg-white/10 transition-all">
                     <div class="flex justify-between items-center mb-1">
                         <span id="halloweenLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
                             <i class="fa-solid fa-ghost"></i> Halloween Countdown
@@ -205,7 +205,7 @@
                 </div>
 
                 <!-- Countdown 3: Birthday (March 28) -->
-                <div class="countdown-card w-full max-w-sm lg:max-w-md bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm hover:bg-white/10 transition-all">
+                <div class="countdown-card w-full max-w-sm bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm hover:bg-white/10 transition-all">
                     <div class="flex justify-between items-center mb-1">
                         <span id="bdayLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
                             <i class="fa-solid fa-cake-candles"></i> Birthday Countdown
@@ -1226,7 +1226,7 @@
 
             // Apply Clock Typography & Glow
             const clockEl = document.getElementById('clockContainer');
-            clockEl.className = `flex flex-col items-center md:items-start text-center md:text-left transition-all w-full max-w-xl ${appSettings.clockFont}`;
+            clockEl.className = `flex flex-col items-center md:items-end text-center md:text-right transition-all w-full ${appSettings.clockFont}`;
 
             const timeDisplay = document.getElementById('timeDisplay');
             timeDisplay.className = `text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none whitespace-nowrap ${appSettings.glowStyle}`;
