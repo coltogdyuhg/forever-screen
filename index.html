@@ -167,10 +167,10 @@
 
             <!-- Left Side of Center: Digital Clock & Date -->
             <div id="clockContainer" class="flex flex-col items-center md:items-end text-center md:text-right transition-all w-full">
-                <div id="timeDisplay" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none whitespace-nowrap">
+                <div id="timeDisplay" class="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold tracking-tight leading-none whitespace-nowrap">
                     00:00:00
                 </div>
-                <div id="dateDisplay" class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light tracking-wider mt-3 md:mt-5 opacity-90">
+                <div id="dateDisplay" class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light tracking-wider mt-4 md:mt-6 opacity-90">
                     January 1, '26
                 </div>
             </div>
@@ -569,11 +569,11 @@
                             <input type="range" id="inputSnowDensity" min="30" max="300" value="120" class="w-full accent-amber-400 bg-white/10 rounded-lg cursor-pointer h-2">
                         </div>
 
-                        <!-- Marquee Scroll Speed -->
+                        <!-- Marquee Scroll Speed Slider -->
                         <div class="bg-white/5 p-3.5 rounded-2xl border border-white/10">
                             <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">
                                 <span>Marquee Speed</span>
-                                <span id="marqueeSpeedVal" class="text-amber-400 font-mono">Medium (25s)</span>
+                                <span id="marqueeSpeedVal" class="text-amber-400 font-mono">25s</span>
                             </div>
                             <input type="range" id="inputMarqueeSpeed" min="5" max="50" step="1" value="25" class="w-full accent-amber-400 bg-white/10 rounded-lg cursor-pointer h-2">
                         </div>
@@ -1208,13 +1208,19 @@
         }
 
         function applySettingsToUI() {
-            // Apply Marquee Seamless Continuous Text
+            // Repeat short text so it seamlessly scrolls no matter how small it is
+            let baseText = appSettings.marqueeText;
+            let repeatedText = baseText;
+            while (repeatedText.length < 120) {
+                repeatedText += " • " + baseText;
+            }
+
             const text1 = document.getElementById('marqueeText1');
             const text2 = document.getElementById('marqueeText2');
             const wrapper = document.getElementById('marqueeWrapper');
 
-            text1.textContent = appSettings.marqueeText;
-            text2.textContent = appSettings.marqueeText;
+            text1.textContent = repeatedText;
+            text2.textContent = repeatedText;
 
             text1.className = `text-sm sm:text-base md:text-lg tracking-widest font-light pr-12 ${appSettings.marqueeFont}`;
             text2.className = `text-sm sm:text-base md:text-lg tracking-widest font-light pr-12 ${appSettings.marqueeFont}`;
@@ -1229,7 +1235,7 @@
             clockEl.className = `flex flex-col items-center md:items-end text-center md:text-right transition-all w-full ${appSettings.clockFont}`;
 
             const timeDisplay = document.getElementById('timeDisplay');
-            timeDisplay.className = `text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none whitespace-nowrap ${appSettings.glowStyle}`;
+            timeDisplay.className = `text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold tracking-tight leading-none whitespace-nowrap ${appSettings.glowStyle}`;
 
             // Apply Separate Countdown Title & Digit Typography & Color
             const countdownLabels = document.querySelectorAll('.countdown-label');
