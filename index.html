@@ -916,7 +916,7 @@
             applyCardColors('halloweenCountdown', halloweenCardColor);
             applyCardColors('bdayCountdown', bdayCardColor);
 
-            // Re-render scrolling marquee with alternating theme colors per letter
+            // Re-render scrolling marquee with alternating word colors
             renderMarqueeText(activeThemeColors);
         }
 
@@ -1221,18 +1221,19 @@
                 repeatedText += " • " + baseText;
             }
 
-            // Build alternating colored letters string
+            // Split text into words to alternate color word-by-word
+            let words = repeatedText.split(/(\s+)/);
             let htmlContent = "";
             let colorIndex = 0;
             
-            for (let i = 0; i < repeatedText.length; i++) {
-                let char = repeatedText[i];
-                if (char === " ") {
-                    htmlContent += "&nbsp;";
+            for (let i = 0; i < words.length; i++) {
+                let word = words[i];
+                if (/^\s+$/.test(word)) {
+                    htmlContent += word.replace(/ /g, "&nbsp;");
                     continue;
                 }
                 let currentColor = paletteColors[colorIndex % paletteColors.length];
-                htmlContent += `<span style="color: ${currentColor}">${char}</span>`;
+                htmlContent += `<span style="color: ${currentColor}">${word}</span>`;
                 colorIndex++;
             }
 
