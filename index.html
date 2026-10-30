@@ -18,8 +18,8 @@
         body, html {
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
             background-color: #000000;
             color: #ffffff;
@@ -43,10 +43,11 @@
             position: relative;
             z-index: 2;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-sizing: border-box;
         }
 
         /* Font Classes */
@@ -130,89 +131,89 @@
     <!-- Snow Animation Canvas -->
     <canvas id="snowCanvas"></canvas>
 
-    <!-- Main Screensaver Container -->
-    <div id="appContainer" class="p-6 md:p-10 flex flex-col justify-between h-full">
+    <!-- Main Screensaver Container optimized for laptop/Chromebook viewports -->
+    <div id="appContainer" class="p-3 sm:p-5 md:p-6 flex flex-col justify-between h-screen">
 
         <!-- Top Bar: Daily Fun Fact & Controls -->
-        <header class="flex justify-between items-start z-10 w-full">
+        <header class="flex justify-between items-center z-10 w-full shrink-0">
             <!-- Placeholder for left alignment balance -->
-            <div class="w-12 h-12"></div>
+            <div class="w-9 h-9"></div>
 
             <!-- Top Center: Daily Fun Fact Box -->
-            <div id="factBox" class="max-w-2xl text-center bg-black/40 backdrop-blur-md border border-white/10 px-6 py-3 rounded-2xl shadow-2xl transition-all duration-300 hover:border-white/20">
-                <div id="factHeader" class="flex items-center justify-center space-x-2 text-xs uppercase tracking-widest mb-1 font-semibold">
+            <div id="factBox" class="max-w-xl text-center bg-black/40 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl shadow-2xl transition-all duration-300 hover:border-white/20">
+                <div id="factHeader" class="flex items-center justify-center space-x-1.5 text-[11px] uppercase tracking-widest mb-0.5 font-semibold">
                     <i class="fa-solid fa-lightbulb"></i>
                     <span>Fact of the Day</span>
                 </div>
-                <p id="factDisplay" class="text-xs sm:text-sm md:text-base font-light tracking-wide italic leading-relaxed">
+                <p id="factDisplay" class="text-xs sm:text-sm font-light tracking-wide italic leading-snug truncate max-w-md sm:max-w-lg md:max-w-xl">
                     Loading daily wisdom...
                 </p>
             </div>
 
             <!-- Top Right: Action Buttons (Fullscreen & Settings Pencil) -->
-            <div class="flex items-center space-x-3 edit-control">
+            <div class="flex items-center space-x-2 edit-control">
                 <!-- Settings Pencil Trigger Button -->
-                <button id="editBtn" onclick="toggleSettingsModal()" class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all transform hover:scale-105 shadow-lg active:scale-95" title="Customize Screensaver">
-                    <i class="fa-solid fa-pencil text-sm"></i>
+                <button id="editBtn" onclick="toggleSettingsModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all transform hover:scale-105 shadow-lg active:scale-95" title="Customize Screensaver">
+                    <i class="fa-solid fa-pencil text-xs"></i>
                 </button>
                 <!-- Fullscreen Toggle Button -->
-                <button id="fullscreenBtn" onclick="toggleFullscreen()" class="w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all transform hover:scale-105 shadow-lg active:scale-95" title="Toggle Fullscreen">
-                    <i class="fa-solid fa-expand text-sm" id="fullscreenIcon"></i>
+                <button id="fullscreenBtn" onclick="toggleFullscreen()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all transform hover:scale-105 shadow-lg active:scale-95" title="Toggle Fullscreen">
+                    <i class="fa-solid fa-expand text-xs" id="fullscreenIcon"></i>
                 </button>
             </div>
         </header>
 
-        <!-- Middle Content Area (Clock & Countdowns meeting near the middle) -->
-        <main class="flex-1 grid grid-cols-1 md:grid-cols-2 items-center justify-center my-auto px-4 md:px-6 gap-6 md:gap-10 lg:gap-14 z-10 w-full max-w-6xl mx-auto">
+        <!-- Middle Content Area: Clock & Countdowns meeting near center without screen overflow -->
+        <main class="flex-1 grid grid-cols-1 md:grid-cols-2 items-center justify-center my-auto px-2 sm:px-6 gap-4 md:gap-8 lg:gap-10 z-10 w-full max-w-5xl mx-auto overflow-hidden">
 
             <!-- Left Side of Center: Digital Clock & Date -->
             <div id="clockContainer" class="flex flex-col items-center md:items-end text-center md:text-right transition-all w-full">
-                <div id="timeDisplay" class="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold tracking-tight leading-none whitespace-nowrap">
+                <div id="timeDisplay" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-none whitespace-nowrap">
                     00:00:00
                 </div>
-                <div id="dateDisplay" class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light tracking-wider mt-4 md:mt-6 opacity-90">
+                <div id="dateDisplay" class="text-base sm:text-lg md:text-xl lg:text-2xl font-light tracking-wider mt-2 md:mt-3 opacity-90">
                     January 1, '26
                 </div>
             </div>
 
             <!-- Right Side of Center: Event Countdowns -->
-            <div id="countdownContainer" class="flex flex-col items-center md:items-start space-y-4 md:space-y-5 w-full">
+            <div id="countdownContainer" class="flex flex-col items-center md:items-start space-y-2.5 sm:space-y-3 w-full">
 
                 <!-- Countdown 1: Christmas -->
-                <div class="countdown-card w-full max-w-sm bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm hover:bg-white/10 transition-all">
-                    <div class="flex justify-between items-center mb-1">
-                        <span id="xmasLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
+                <div class="countdown-card w-full max-w-xs sm:max-w-sm bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-sm hover:bg-white/10 transition-all">
+                    <div class="flex justify-between items-center mb-0.5">
+                        <span id="xmasLabel" class="countdown-label text-[11px] uppercase tracking-widest font-semibold flex items-center gap-1.5">
                             <i class="fa-solid fa-tree"></i> Christmas Countdown
                         </span>
-                        <span id="xmasDateLabel" class="text-xs text-gray-400 font-mono">Dec 25</span>
+                        <span id="xmasDateLabel" class="text-[10px] text-gray-400 font-mono">Dec 25</span>
                     </div>
-                    <div id="xmasCountdown" class="countdown-value text-xl sm:text-2xl md:text-3xl font-semibold tracking-wide">
+                    <div id="xmasCountdown" class="countdown-value text-base sm:text-lg md:text-xl font-semibold tracking-wide">
                         00d 00h 00m 00s
                     </div>
                 </div>
 
                 <!-- Countdown 2: Halloween -->
-                <div class="countdown-card w-full max-w-sm bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm hover:bg-white/10 transition-all">
-                    <div class="flex justify-between items-center mb-1">
-                        <span id="halloweenLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
+                <div class="countdown-card w-full max-w-xs sm:max-w-sm bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-sm hover:bg-white/10 transition-all">
+                    <div class="flex justify-between items-center mb-0.5">
+                        <span id="halloweenLabel" class="countdown-label text-[11px] uppercase tracking-widest font-semibold flex items-center gap-1.5">
                             <i class="fa-solid fa-ghost"></i> Halloween Countdown
                         </span>
-                        <span id="halloweenDateLabel" class="text-xs text-gray-400 font-mono">Oct 31</span>
+                        <span id="halloweenDateLabel" class="text-[10px] text-gray-400 font-mono">Oct 31</span>
                     </div>
-                    <div id="halloweenCountdown" class="countdown-value text-xl sm:text-2xl md:text-3xl font-semibold tracking-wide">
+                    <div id="halloweenCountdown" class="countdown-value text-base sm:text-lg md:text-xl font-semibold tracking-wide">
                         00d 00h 00m 00s
                     </div>
                 </div>
 
                 <!-- Countdown 3: Birthday (March 28) -->
-                <div class="countdown-card w-full max-w-sm bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm hover:bg-white/10 transition-all">
-                    <div class="flex justify-between items-center mb-1">
-                        <span id="bdayLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
+                <div class="countdown-card w-full max-w-xs sm:max-w-sm bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-sm hover:bg-white/10 transition-all">
+                    <div class="flex justify-between items-center mb-0.5">
+                        <span id="bdayLabel" class="countdown-label text-[11px] uppercase tracking-widest font-semibold flex items-center gap-1.5">
                             <i class="fa-solid fa-cake-candles"></i> Birthday Countdown
                         </span>
-                        <span id="bdayDateLabel" class="text-xs text-gray-400 font-mono">Mar 28</span>
+                        <span id="bdayDateLabel" class="text-[10px] text-gray-400 font-mono">Mar 28</span>
                     </div>
-                    <div id="bdayCountdown" class="countdown-value text-xl sm:text-2xl md:text-3xl font-semibold tracking-wide">
+                    <div id="bdayCountdown" class="countdown-value text-base sm:text-lg md:text-xl font-semibold tracking-wide">
                         00d 00h 00m 00s
                     </div>
                 </div>
@@ -221,11 +222,11 @@
         </main>
 
         <!-- Bottom Bar: Scrolling Marquee Ticker -->
-        <footer id="footerTicker" class="w-full bg-black/60 border-t border-white/10 py-3 overflow-hidden backdrop-blur-md rounded-xl z-10">
+        <footer id="footerTicker" class="w-full bg-black/60 border-t border-white/10 py-2 overflow-hidden backdrop-blur-md rounded-lg z-10 shrink-0">
             <div class="w-full overflow-hidden whitespace-nowrap relative flex items-center">
                 <div id="marqueeWrapper" class="marquee-wrapper">
-                    <span id="marqueeText1" class="text-sm sm:text-base md:text-lg tracking-widest font-light pr-12"></span>
-                    <span id="marqueeText2" class="text-sm sm:text-base md:text-lg tracking-widest font-light pr-12"></span>
+                    <span id="marqueeText1" class="text-xs sm:text-sm md:text-base tracking-widest font-light pr-12"></span>
+                    <span id="marqueeText2" class="text-xs sm:text-sm md:text-base tracking-widest font-light pr-12"></span>
                 </div>
             </div>
         </footer>
@@ -234,35 +235,35 @@
 
     <!-- Edit & Customization Modal Window -->
     <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
-        <div class="glass-panel w-full max-w-3xl rounded-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto text-white shadow-2xl border border-white/20">
+        <div class="glass-panel w-full max-w-2xl rounded-2xl p-5 sm:p-6 max-h-[88vh] overflow-y-auto text-white shadow-2xl border border-white/20">
 
             <!-- Modal Header -->
-            <div class="flex justify-between items-center pb-4 border-b border-white/10 mb-6">
-                <div class="flex items-center space-x-3">
+            <div class="flex justify-between items-center pb-3 border-b border-white/10 mb-4">
+                <div class="flex items-center space-x-2.5">
                     <div class="p-2 rounded-xl bg-white/10">
-                        <i class="fa-solid fa-palette text-amber-400 text-lg"></i>
+                        <i class="fa-solid fa-palette text-amber-400 text-base"></i>
                     </div>
                     <div>
-                        <h2 class="text-xl font-bold tracking-wide">Screensaver Settings</h2>
-                        <p class="text-xs text-gray-400">Customize fonts, colors, multi-color snow & speeds</p>
+                        <h2 class="text-lg font-bold tracking-wide">Screensaver Settings</h2>
+                        <p class="text-[11px] text-gray-400">Customize fonts, colors, multi-color snow & speeds</p>
                     </div>
                 </div>
-                <button onclick="toggleSettingsModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-300 hover:text-white transition-colors">
-                    <i class="fa-solid fa-xmark"></i>
+                <button onclick="toggleSettingsModal()" class="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-300 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-xs"></i>
                 </button>
             </div>
 
             <!-- Settings Form Sections -->
-            <div class="space-y-6">
+            <div class="space-y-4">
 
                 <!-- Global Font Override Quick Action -->
-                <div class="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3">
+                <div class="bg-white/5 border border-white/10 p-3.5 rounded-xl flex flex-col md:flex-row items-center justify-between gap-2.5">
                     <div>
-                        <div class="text-xs font-semibold uppercase tracking-wider text-amber-400">Global Quick Font Switch</div>
-                        <div class="text-xs text-gray-400">Apply a single font family across all components instantly</div>
+                        <div class="text-[11px] font-semibold uppercase tracking-wider text-amber-400">Global Quick Font Switch</div>
+                        <div class="text-[10px] text-gray-400">Apply a single font family across all components instantly</div>
                     </div>
                     <div class="flex items-center space-x-2 w-full md:w-auto">
-                        <select id="selectGlobalFont" class="bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
+                        <select id="selectGlobalFont" class="bg-slate-900 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-amber-400 text-white">
                             <option value="">-- Choose Global Font --</option>
                             <option value="font-inter">Inter</option>
                             <option value="font-poppins">Poppins</option>
@@ -278,7 +279,7 @@
                             <option value="font-space">Space Grotesk</option>
                             <option value="font-syne">Syne</option>
                         </select>
-                        <button onclick="applyGlobalFont()" class="px-3 py-2 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-xl text-xs whitespace-nowrap">
+                        <button onclick="applyGlobalFont()" class="px-2.5 py-1.5 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-lg text-xs whitespace-nowrap">
                             Apply All
                         </button>
                     </div>
@@ -286,15 +287,15 @@
 
                 <!-- 1. Text & Element Font Customizers -->
                 <div>
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
+                    <h3 class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5">
                         <i class="fa-solid fa-font text-amber-400"></i> Section Typography & Live Font Badges
                     </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                         
                         <!-- Clock Font -->
-                        <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
-                            <label class="block text-[11px] font-medium text-gray-300 mb-1">Clock / Date Font</label>
-                            <select id="selectClockFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
+                        <div class="bg-white/5 p-2.5 rounded-xl border border-white/10">
+                            <label class="block text-[10px] font-medium text-gray-300 mb-1">Clock / Date Font</label>
+                            <select id="selectClockFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-amber-400 text-white">
                                 <option value="font-inter">Inter</option>
                                 <option value="font-poppins">Poppins</option>
                                 <option value="font-montserrat">Montserrat</option>
@@ -309,16 +310,16 @@
                                 <option value="font-space">Space Grotesk</option>
                                 <option value="font-syne">Syne</option>
                             </select>
-                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between">
+                            <div class="mt-1.5 text-[9px] text-gray-400 flex items-center justify-between">
                                 <span>Active:</span>
-                                <span id="badgeClockFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span>
+                                <span id="badgeClockFont" class="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] truncate max-w-[100px]">Inter</span>
                             </div>
                         </div>
 
                         <!-- Countdown Labels Font -->
-                        <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
-                            <label class="block text-[11px] font-medium text-gray-300 mb-1">Countdown Titles Font</label>
-                            <select id="selectCountdownLabelFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
+                        <div class="bg-white/5 p-2.5 rounded-xl border border-white/10">
+                            <label class="block text-[10px] font-medium text-gray-300 mb-1">Countdown Titles Font</label>
+                            <select id="selectCountdownLabelFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-amber-400 text-white">
                                 <option value="font-inter">Inter</option>
                                 <option value="font-poppins">Poppins</option>
                                 <option value="font-montserrat">Montserrat</option>
@@ -333,16 +334,16 @@
                                 <option value="font-space">Space Grotesk</option>
                                 <option value="font-syne">Syne</option>
                             </select>
-                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between">
+                            <div class="mt-1.5 text-[9px] text-gray-400 flex items-center justify-between">
                                 <span>Active:</span>
-                                <span id="badgeCountdownLabelFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span>
+                                <span id="badgeCountdownLabelFont" class="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] truncate max-w-[100px]">Inter</span>
                             </div>
                         </div>
 
                         <!-- Countdown Digits Font -->
-                        <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
-                            <label class="block text-[11px] font-medium text-amber-400 font-semibold mb-1">Countdown Digits Font</label>
-                            <select id="selectCountdownDigitFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
+                        <div class="bg-white/5 p-2.5 rounded-xl border border-white/10">
+                            <label class="block text-[10px] font-medium text-amber-400 font-semibold mb-1">Countdown Digits Font</label>
+                            <select id="selectCountdownDigitFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-amber-400 text-white">
                                 <option value="font-mono">JetBrains Mono</option>
                                 <option value="font-orbitron">Orbitron</option>
                                 <option value="font-inter">Inter</option>
@@ -354,16 +355,16 @@
                                 <option value="font-cursive">Dancing Script</option>
                                 <option value="font-space">Space Grotesk</option>
                             </select>
-                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between">
+                            <div class="mt-1.5 text-[9px] text-gray-400 flex items-center justify-between">
                                 <span>Active:</span>
-                                <span id="badgeCountdownDigitFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">JetBrains Mono</span>
+                                <span id="badgeCountdownDigitFont" class="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] truncate max-w-[100px]">JetBrains Mono</span>
                             </div>
                         </div>
 
                         <!-- Fact Font -->
-                        <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
-                            <label class="block text-[11px] font-medium text-gray-300 mb-1">Fun Fact Font</label>
-                            <select id="selectFactFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
+                        <div class="bg-white/5 p-2.5 rounded-xl border border-white/10">
+                            <label class="block text-[10px] font-medium text-gray-300 mb-1">Fun Fact Font</label>
+                            <select id="selectFactFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-amber-400 text-white">
                                 <option value="font-inter">Inter</option>
                                 <option value="font-poppins">Poppins</option>
                                 <option value="font-montserrat">Montserrat</option>
@@ -373,16 +374,16 @@
                                 <option value="font-space">Space Grotesk</option>
                                 <option value="font-syne">Syne</option>
                             </select>
-                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between">
+                            <div class="mt-1.5 text-[9px] text-gray-400 flex items-center justify-between">
                                 <span>Active:</span>
-                                <span id="badgeFactFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span>
+                                <span id="badgeFactFont" class="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] truncate max-w-[100px]">Inter</span>
                             </div>
                         </div>
 
                         <!-- Marquee Font -->
-                        <div class="bg-white/5 p-3 rounded-2xl border border-white/10 sm:col-span-2 md:col-span-2">
-                            <label class="block text-[11px] font-medium text-gray-300 mb-1">Scrolling Marquee Font</label>
-                            <select id="selectMarqueeFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
+                        <div class="bg-white/5 p-2.5 rounded-xl border border-white/10 sm:col-span-2 md:col-span-2">
+                            <label class="block text-[10px] font-medium text-gray-300 mb-1">Scrolling Marquee Font</label>
+                            <select id="selectMarqueeFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:border-amber-400 text-white">
                                 <option value="font-inter">Inter</option>
                                 <option value="font-poppins">Poppins</option>
                                 <option value="font-montserrat">Montserrat</option>
@@ -390,9 +391,9 @@
                                 <option value="font-space">Space Grotesk</option>
                                 <option value="font-quicksand">Quicksand</option>
                             </select>
-                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between">
+                            <div class="mt-1.5 text-[9px] text-gray-400 flex items-center justify-between">
                                 <span>Active:</span>
-                                <span id="badgeMarqueeFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span>
+                                <span id="badgeMarqueeFont" class="px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] truncate max-w-[100px]">Inter</span>
                             </div>
                         </div>
 
@@ -401,110 +402,110 @@
 
                 <!-- 2. Individual Color Customizers & Multi-Color Snowfall Engine -->
                 <div>
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
+                    <h3 class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5">
                         <i class="fa-solid fa-eye-dropper text-amber-400"></i> Individual Element Colors
                     </h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-3">
                         <!-- Clock Color -->
-                        <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <label class="text-[11px] font-medium text-gray-300 mb-2">Clock / Date</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="color" id="inputClockColor" value="#ffffff" class="w-9 h-8 bg-transparent border border-white/20 rounded cursor-pointer">
-                                <span id="clockColorHex" class="text-[10px] font-mono text-gray-400">#ffffff</span>
+                        <div class="bg-white/5 p-2.5 rounded-lg border border-white/10 flex flex-col justify-between">
+                            <label class="text-[10px] font-medium text-gray-300 mb-1.5">Clock / Date</label>
+                            <div class="flex items-center space-x-1.5">
+                                <input type="color" id="inputClockColor" value="#ffffff" class="w-7 h-7 bg-transparent border border-white/20 rounded cursor-pointer">
+                                <span id="clockColorHex" class="text-[9px] font-mono text-gray-400">#ffffff</span>
                             </div>
                         </div>
 
                         <!-- Countdown Color -->
-                        <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <label class="text-[11px] font-medium text-gray-300 mb-2">Countdowns</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="color" id="inputCountdownColor" value="#ffffff" class="w-9 h-8 bg-transparent border border-white/20 rounded cursor-pointer">
-                                <span id="countdownColorHex" class="text-[10px] font-mono text-gray-400">#ffffff</span>
+                        <div class="bg-white/5 p-2.5 rounded-lg border border-white/10 flex flex-col justify-between">
+                            <label class="text-[10px] font-medium text-gray-300 mb-1.5">Countdowns</label>
+                            <div class="flex items-center space-x-1.5">
+                                <input type="color" id="inputCountdownColor" value="#ffffff" class="w-7 h-7 bg-transparent border border-white/20 rounded cursor-pointer">
+                                <span id="countdownColorHex" class="text-[9px] font-mono text-gray-400">#ffffff</span>
                             </div>
                         </div>
 
                         <!-- Fun Fact Color -->
-                        <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <label class="text-[11px] font-medium text-gray-300 mb-2">Daily Fun Fact</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="color" id="inputFactColor" value="#ffffff" class="w-9 h-8 bg-transparent border border-white/20 rounded cursor-pointer">
-                                <span id="factColorHex" class="text-[10px] font-mono text-gray-400">#ffffff</span>
+                        <div class="bg-white/5 p-2.5 rounded-lg border border-white/10 flex flex-col justify-between">
+                            <label class="text-[10px] font-medium text-gray-300 mb-1.5">Daily Fun Fact</label>
+                            <div class="flex items-center space-x-1.5">
+                                <input type="color" id="inputFactColor" value="#ffffff" class="w-7 h-7 bg-transparent border border-white/20 rounded cursor-pointer">
+                                <span id="factColorHex" class="text-[9px] font-mono text-gray-400">#ffffff</span>
                             </div>
                         </div>
 
                         <!-- Marquee Color -->
-                        <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex flex-col justify-between">
-                            <label class="text-[11px] font-medium text-gray-300 mb-2">Scrolling Text</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="color" id="inputMarqueeColor" value="#ffffff" class="w-9 h-8 bg-transparent border border-white/20 rounded cursor-pointer">
-                                <span id="marqueeColorHex" class="text-[10px] font-mono text-gray-400">#ffffff</span>
+                        <div class="bg-white/5 p-2.5 rounded-lg border border-white/10 flex flex-col justify-between">
+                            <label class="text-[10px] font-medium text-gray-300 mb-1.5">Scrolling Text</label>
+                            <div class="flex items-center space-x-1.5">
+                                <input type="color" id="inputMarqueeColor" value="#ffffff" class="w-7 h-7 bg-transparent border border-white/20 rounded cursor-pointer">
+                                <span id="marqueeColorHex" class="text-[9px] font-mono text-gray-400">#ffffff</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Dynamic Holiday Theme Auto-Trigger Configuration -->
-                    <div class="bg-white/5 border border-white/10 p-4 rounded-2xl mb-4">
-                        <div class="flex items-center justify-between mb-3">
+                    <div class="bg-white/5 border border-white/10 p-3 rounded-xl mb-3">
+                        <div class="flex items-center justify-between mb-2">
                             <div>
-                                <div class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Holiday Theme Auto-Colors</div>
-                                <div class="text-[11px] text-gray-400">Auto-change clock, snow & marquee colors during specific calendar date ranges</div>
+                                <div class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider">Holiday Theme Auto-Colors</div>
+                                <div class="text-[10px] text-gray-400">Auto-change clock, snow & marquee colors during specific date ranges</div>
                             </div>
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" id="toggleHolidayThemes" checked class="accent-amber-400 w-4 h-4 rounded">
+                            <label class="flex items-center space-x-1.5 cursor-pointer">
+                                <input type="checkbox" id="toggleHolidayThemes" checked class="accent-amber-400 w-3.5 h-3.5 rounded">
                                 <span class="text-xs text-gray-300">Enable Auto Themes</span>
                             </label>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
                             <!-- Halloween Date Range -->
-                            <div class="bg-black/40 p-3 rounded-xl border border-orange-500/30 flex flex-col justify-between">
-                                <div class="flex items-center justify-between text-xs font-semibold text-orange-400 mb-2">
+                            <div class="bg-black/40 p-2.5 rounded-lg border border-orange-500/30 flex flex-col justify-between">
+                                <div class="flex items-center justify-between text-[11px] font-semibold text-orange-400 mb-1.5">
                                     <span>🎃 Halloween</span>
-                                    <span class="text-[10px] text-gray-400 font-mono">Orange/Purple</span>
+                                    <span class="text-[9px] text-gray-400 font-mono">Orange/Purple</span>
                                 </div>
-                                <div class="space-y-1.5 text-xs">
+                                <div class="space-y-1 text-xs">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">Start Date:</span>
-                                        <input type="text" id="inputHalloweenStart" placeholder="MM-DD" value="10-24" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
+                                        <span class="text-[9px] text-gray-400">Start Date:</span>
+                                        <input type="text" id="inputHalloweenStart" placeholder="MM-DD" value="10-24" class="w-14 bg-slate-900 border border-white/20 rounded px-1.5 py-0.5 text-[10px] text-center font-mono text-white">
                                     </div>
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">End Date:</span>
-                                        <input type="text" id="inputHalloweenEnd" placeholder="MM-DD" value="10-31" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
+                                        <span class="text-[9px] text-gray-400">End Date:</span>
+                                        <input type="text" id="inputHalloweenEnd" placeholder="MM-DD" value="10-31" class="w-14 bg-slate-900 border border-white/20 rounded px-1.5 py-0.5 text-[10px] text-center font-mono text-white">
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Christmas Date Range -->
-                            <div class="bg-black/40 p-3 rounded-xl border border-emerald-500/30 flex flex-col justify-between">
-                                <div class="flex items-center justify-between text-xs font-semibold text-emerald-400 mb-2">
+                            <div class="bg-black/40 p-2.5 rounded-lg border border-emerald-500/30 flex flex-col justify-between">
+                                <div class="flex items-center justify-between text-[11px] font-semibold text-emerald-400 mb-1.5">
                                     <span>🎄 Christmas</span>
-                                    <span class="text-[10px] text-gray-400 font-mono">Red/Green</span>
+                                    <span class="text-[9px] text-gray-400 font-mono">Red/Green</span>
                                 </div>
-                                <div class="space-y-1.5 text-xs">
+                                <div class="space-y-1 text-xs">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">Start Date:</span>
-                                        <input type="text" id="inputChristmasStart" placeholder="MM-DD" value="11-01" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
+                                        <span class="text-[9px] text-gray-400">Start Date:</span>
+                                        <input type="text" id="inputChristmasStart" placeholder="MM-DD" value="11-01" class="w-14 bg-slate-900 border border-white/20 rounded px-1.5 py-0.5 text-[10px] text-center font-mono text-white">
                                     </div>
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">End Date:</span>
-                                        <input type="text" id="inputChristmasEnd" placeholder="MM-DD" value="12-26" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
+                                        <span class="text-[9px] text-gray-400">End Date:</span>
+                                        <input type="text" id="inputChristmasEnd" placeholder="MM-DD" value="12-26" class="w-14 bg-slate-900 border border-white/20 rounded px-1.5 py-0.5 text-[10px] text-center font-mono text-white">
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Birthday Date Range -->
-                            <div class="bg-black/40 p-3 rounded-xl border border-cyan-500/30 flex flex-col justify-between">
-                                <div class="flex items-center justify-between text-xs font-semibold text-cyan-400 mb-2">
+                            <div class="bg-black/40 p-2.5 rounded-lg border border-cyan-500/30 flex flex-col justify-between">
+                                <div class="flex items-center justify-between text-[11px] font-semibold text-cyan-400 mb-1.5">
                                     <span>🎂 Birthday</span>
-                                    <span class="text-[10px] text-gray-400 font-mono">Blue/White</span>
+                                    <span class="text-[9px] text-gray-400 font-mono">Blue/White</span>
                                 </div>
-                                <div class="space-y-1.5 text-xs">
+                                <div class="space-y-1 text-xs">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">Start Date:</span>
-                                        <input type="text" id="inputBirthdayStart" placeholder="MM-DD" value="03-27" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
+                                        <span class="text-[9px] text-gray-400">Start Date:</span>
+                                        <input type="text" id="inputBirthdayStart" placeholder="MM-DD" value="03-27" class="w-14 bg-slate-900 border border-white/20 rounded px-1.5 py-0.5 text-[10px] text-center font-mono text-white">
                                     </div>
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">End Date:</span>
-                                        <input type="text" id="inputBirthdayEnd" placeholder="MM-DD" value="03-28" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
+                                        <span class="text-[9px] text-gray-400">End Date:</span>
+                                        <input type="text" id="inputBirthdayEnd" placeholder="MM-DD" value="03-28" class="w-14 bg-slate-900 border border-white/20 rounded px-1.5 py-0.5 text-[10px] text-center font-mono text-white">
                                     </div>
                                 </div>
                             </div>
@@ -512,22 +513,22 @@
                     </div>
 
                     <!-- Multi-Color Snow Palette Section (Up to 5 Colors) -->
-                    <div class="bg-white/5 border border-white/10 p-4 rounded-2xl">
-                        <div class="flex items-center justify-between mb-3">
+                    <div class="bg-white/5 border border-white/10 p-3 rounded-xl">
+                        <div class="flex items-center justify-between mb-2">
                             <div>
-                                <div class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Multi-Color Snow Palette</div>
-                                <div class="text-[11px] text-gray-400">Add up to 5 colors for a dynamic festive snowfall</div>
+                                <div class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider">Multi-Color Snow Palette</div>
+                                <div class="text-[10px] text-gray-400">Add up to 5 colors for a dynamic festive snowfall</div>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <input type="color" id="inputNewSnowColor" value="#22c55e" class="w-8 h-8 bg-transparent border border-white/20 rounded cursor-pointer">
-                                <button onclick="addSnowColor()" id="btnAddSnowColor" class="w-8 h-8 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-bold flex items-center justify-center text-sm shadow transition-all">
+                                <input type="color" id="inputNewSnowColor" value="#22c55e" class="w-7 h-7 bg-transparent border border-white/20 rounded cursor-pointer">
+                                <button onclick="addSnowColor()" id="btnAddSnowColor" class="w-7 h-7 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-bold flex items-center justify-center text-xs shadow transition-all">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                             </div>
                         </div>
 
                         <!-- Dynamic Snow Colors Container -->
-                        <div id="snowColorsList" class="flex flex-wrap gap-2 pt-1">
+                        <div id="snowColorsList" class="flex flex-wrap gap-2 pt-0.5">
                             <!-- Populated dynamically via JS -->
                         </div>
                     </div>
@@ -535,54 +536,54 @@
 
                 <!-- 3. Scrolling Marquee Content Customizer -->
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+                    <label class="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
                         Bottom Scrolling Text Content
                     </label>
-                    <input type="text" id="inputMarquee" class="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-400 text-white placeholder-gray-500 transition-colors" placeholder="Enter custom marquee message...">
+                    <input type="text" id="inputMarquee" class="w-full bg-white/5 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white placeholder-gray-500 transition-colors" placeholder="Enter custom marquee message...">
                 </div>
 
                 <!-- 4. Speed & Dynamics Sliders (Snow Speed + Marquee Speed) -->
                 <div>
-                    <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
+                    <h3 class="text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5">
                         <i class="fa-solid fa-gauge-high text-amber-400"></i> Speed & Dynamics Controls
                     </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <!-- Snowfall Speed -->
-                        <div class="bg-white/5 p-3.5 rounded-2xl border border-white/10">
-                            <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/10">
+                            <div class="flex justify-between text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-1.5">
                                 <span>Snow Speed</span>
                                 <span id="snowSpeedVal" class="text-amber-400 font-mono">1.0x</span>
                             </div>
-                            <input type="range" id="inputSnowSpeed" min="0.2" max="4.0" step="0.1" value="1.0" class="w-full accent-amber-400 bg-white/10 rounded-lg cursor-pointer h-2">
+                            <input type="range" id="inputSnowSpeed" min="0.2" max="4.0" step="0.1" value="1.0" class="w-full accent-amber-400 bg-white/10 rounded-lg cursor-pointer h-1.5">
                         </div>
 
                         <!-- Snow Density -->
-                        <div class="bg-white/5 p-3.5 rounded-2xl border border-white/10">
-                            <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/10">
+                            <div class="flex justify-between text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-1.5">
                                 <span>Snow Density</span>
                                 <span id="snowDensityVal" class="text-amber-400 font-mono">120</span>
                             </div>
-                            <input type="range" id="inputSnowDensity" min="30" max="300" value="120" class="w-full accent-amber-400 bg-white/10 rounded-lg cursor-pointer h-2">
+                            <input type="range" id="inputSnowDensity" min="30" max="300" value="120" class="w-full accent-amber-400 bg-white/10 rounded-lg cursor-pointer h-1.5">
                         </div>
 
                         <!-- Marquee Scroll Speed Slider -->
-                        <div class="bg-white/5 p-3.5 rounded-2xl border border-white/10">
-                            <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">
+                        <div class="bg-white/5 p-3 rounded-xl border border-white/10">
+                            <div class="flex justify-between text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-1.5">
                                 <span>Marquee Speed</span>
                                 <span id="marqueeSpeedVal" class="text-amber-400 font-mono">25s</span>
                             </div>
-                            <input type="range" id="inputMarqueeSpeed" min="5" max="50" step="1" value="25" class="w-full accent-amber-400 bg-white/10 rounded-lg cursor-pointer h-2">
+                            <input type="range" id="inputMarqueeSpeed" min="5" max="50" step="1" value="25" class="w-full accent-amber-400 bg-white/10 rounded-lg cursor-pointer h-1.5">
                         </div>
                     </div>
                 </div>
 
                 <!-- 5. Glow Effect & Display Toggles -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-white/10 pt-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 border-t border-white/10 pt-3">
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+                        <label class="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
                             Clock Text Glow Effect
                         </label>
-                        <select id="selectGlow" class="w-full bg-slate-900 border border-white/15 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amber-400 text-white">
+                        <select id="selectGlow" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
                             <option value="glow-soft">Soft Subtle Glow</option>
                             <option value="glow-intense">Neon Intense Glow</option>
                             <option value="glow-none">No Glow (Pure Flat)</option>
@@ -590,29 +591,29 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+                        <label class="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1.5">
                             Visibility Toggles
                         </label>
-                        <div class="flex items-center space-x-3 text-xs">
-                            <label class="flex items-center space-x-2 cursor-pointer bg-white/5 p-2.5 rounded-xl border border-white/10 flex-1">
-                                <input type="checkbox" id="toggleFact" checked class="accent-amber-400 w-4 h-4 rounded">
-                                <span>Show Daily Fact</span>
+                        <div class="flex items-center space-x-2 text-xs">
+                            <label class="flex items-center space-x-2 cursor-pointer bg-white/5 p-2 rounded-xl border border-white/10 flex-1">
+                                <input type="checkbox" id="toggleFact" checked class="accent-amber-400 w-3.5 h-3.5 rounded">
+                                <span class="text-xs">Show Daily Fact</span>
                             </label>
-                            <label class="flex items-center space-x-2 cursor-pointer bg-white/5 p-2.5 rounded-xl border border-white/10 flex-1">
-                                <input type="checkbox" id="toggleMarquee" checked class="accent-amber-400 w-4 h-4 rounded">
-                                <span>Show Marquee</span>
+                            <label class="flex items-center space-x-2 cursor-pointer bg-white/5 p-2 rounded-xl border border-white/10 flex-1">
+                                <input type="checkbox" id="toggleMarquee" checked class="accent-amber-400 w-3.5 h-3.5 rounded">
+                                <span class="text-xs">Show Marquee</span>
                             </label>
                         </div>
                     </div>
                 </div>
 
                 <!-- 6. Fact Refresh Option -->
-                <div class="flex items-center justify-between border-t border-white/10 pt-4">
+                <div class="flex items-center justify-between border-t border-white/10 pt-3">
                     <div>
                         <div class="text-xs font-medium">Daily Fun Fact</div>
-                        <div class="text-[11px] text-gray-400">Fetch another random daily curiosity</div>
+                        <div class="text-[10px] text-gray-400">Fetch another random daily curiosity</div>
                     </div>
-                    <button onclick="generateRandomFact()" class="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all">
+                    <button onclick="generateRandomFact()" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all">
                         <i class="fa-solid fa-rotate"></i> New Fact
                     </button>
                 </div>
@@ -620,11 +621,11 @@
             </div>
 
             <!-- Modal Action Buttons -->
-            <div class="flex items-center justify-end space-x-3 border-t border-white/10 pt-6 mt-6">
-                <button onclick="resetSettingsToDefault()" class="px-5 py-2.5 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
+            <div class="flex items-center justify-end space-x-2.5 border-t border-white/10 pt-4 mt-4">
+                <button onclick="resetSettingsToDefault()" class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
                     Reset Defaults
                 </button>
-                <button onclick="saveAndApplySettings()" class="px-6 py-2.5 rounded-xl text-xs font-semibold bg-amber-400 hover:bg-amber-300 text-black shadow-lg transition-transform transform active:scale-95">
+                <button onclick="saveAndApplySettings()" class="px-5 py-2 rounded-xl text-xs font-semibold bg-amber-400 hover:bg-amber-300 text-black shadow-lg transition-transform transform active:scale-95">
                     Save Preferences
                 </button>
             </div>
@@ -732,7 +733,7 @@
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * -canvas.height;
-                this.radius = Math.random() * 2.5 + 0.8; // Small dots
+                this.radius = Math.random() * 2.2 + 0.8; // Small crisp dots
                 this.speed = (Math.random() * 1.2 + 0.5) * parseFloat(appSettings.snowSpeed);
                 this.wind = Math.random() * 0.5 - 0.25;
                 this.opacity = Math.random() * 0.7 + 0.3;
@@ -976,10 +977,10 @@
         document.addEventListener('fullscreenchange', () => {
             const icon = document.getElementById('fullscreenIcon');
             if (document.fullscreenElement) {
-                icon.className = "fa-solid fa-compress text-sm";
+                icon.className = "fa-solid fa-compress text-xs";
                 document.body.classList.add('hide-controls');
             } else {
-                icon.className = "fa-solid fa-expand text-sm";
+                icon.className = "fa-solid fa-expand text-xs";
                 document.body.classList.remove('hide-controls');
             }
         });
@@ -993,10 +994,10 @@
 
             appSettings.snowColors.forEach((colorHex, index) => {
                 const item = document.createElement('div');
-                item.className = "flex items-center space-x-1.5 bg-black/40 border border-white/15 px-2.5 py-1 rounded-xl";
+                item.className = "flex items-center space-x-1.5 bg-black/40 border border-white/15 px-2 py-0.5 rounded-lg";
                 item.innerHTML = `
-                    <span class="w-3.5 h-3.5 rounded-full border border-white/30" style="background-color: ${colorHex}"></span>
-                    <span class="text-[10px] font-mono text-gray-300">${colorHex}</span>
+                    <span class="w-3 h-3 rounded-full border border-white/30" style="background-color: ${colorHex}"></span>
+                    <span class="text-[9px] font-mono text-gray-300">${colorHex}</span>
                     ${appSettings.snowColors.length > 1 ? `
                         <button onclick="removeSnowColor(${index})" class="text-gray-400 hover:text-red-400 text-xs ml-1">
                             <i class="fa-solid fa-xmark"></i>
@@ -1044,7 +1045,7 @@
                 const el = document.getElementById(badgeId);
                 if (el) {
                     el.textContent = FONT_DISPLAY_NAMES[fontClass] || fontClass;
-                    el.className = `px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px] ${fontClass}`;
+                    el.className = `px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] truncate max-w-[100px] ${fontClass}`;
                 }
             };
 
@@ -1244,8 +1245,8 @@
             text1.innerHTML = htmlContent;
             text2.innerHTML = htmlContent;
 
-            text1.className = `text-sm sm:text-base md:text-lg tracking-widest font-light pr-12 ${appSettings.marqueeFont}`;
-            text2.className = `text-sm sm:text-base md:text-lg tracking-widest font-light pr-12 ${appSettings.marqueeFont}`;
+            text1.className = `text-xs sm:text-sm md:text-base tracking-widest font-light pr-12 ${appSettings.marqueeFont}`;
+            text2.className = `text-xs sm:text-sm md:text-base tracking-widest font-light pr-12 ${appSettings.marqueeFont}`;
 
             wrapper.style.animationDuration = `${appSettings.marqueeSpeed}s`;
         }
@@ -1256,24 +1257,24 @@
             clockEl.className = `flex flex-col items-center md:items-end text-center md:text-right transition-all w-full ${appSettings.clockFont}`;
 
             const timeDisplay = document.getElementById('timeDisplay');
-            timeDisplay.className = `text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold tracking-tight leading-none whitespace-nowrap ${appSettings.glowStyle}`;
+            timeDisplay.className = `text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-none whitespace-nowrap ${appSettings.glowStyle}`;
 
             // Apply Separate Countdown Title & Digit Typography & Color
             const countdownLabels = document.querySelectorAll('.countdown-label');
             countdownLabels.forEach(lbl => {
-                lbl.className = `countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2 ${appSettings.countdownLabelFont}`;
+                lbl.className = `countdown-label text-[11px] uppercase tracking-widest font-semibold flex items-center gap-1.5 ${appSettings.countdownLabelFont}`;
                 lbl.style.color = appSettings.countdownColor;
             });
 
             const countdownValues = document.querySelectorAll('.countdown-value');
             countdownValues.forEach(val => {
-                val.className = `countdown-value text-xl sm:text-2xl md:text-3xl font-semibold tracking-wide ${appSettings.countdownDigitFont}`;
+                val.className = `countdown-value text-base sm:text-lg md:text-xl font-semibold tracking-wide ${appSettings.countdownDigitFont}`;
                 val.style.color = appSettings.countdownColor;
             });
 
             // Apply Fun Fact Typography & Color
             const factBox = document.getElementById('factBox');
-            factBox.className = `max-w-2xl text-center bg-black/40 backdrop-blur-md border border-white/10 px-6 py-3 rounded-2xl shadow-2xl transition-all duration-300 hover:border-white/20 ${appSettings.factFont}`;
+            factBox.className = `max-w-xl text-center bg-black/40 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl shadow-2xl transition-all duration-300 hover:border-white/20 ${appSettings.factFont}`;
 
             const factHeader = document.getElementById('factHeader');
             factHeader.style.color = appSettings.factColor;
