@@ -145,7 +145,7 @@
         <!-- Top Bar: Daily Fun Fact & Controls -->
         <header class="flex justify-between items-start z-10 w-full">
             <!-- Left Corner Holiday Decor Widget -->
-            <div id="holidayDecorLeft" class="text-2xl sm:text-3xl md:text-4xl holiday-decor select-none opacity-90"></div>
+            <div id="holidayDecorTopLeft" class="text-2xl sm:text-3xl md:text-4xl holiday-decor select-none opacity-90"></div>
 
             <!-- Top Center: Daily Fun Fact Box -->
             <div id="factBox" class="max-w-xl text-center bg-black/40 backdrop-blur-md border border-white/10 px-5 py-2.5 rounded-2xl shadow-2xl transition-all duration-300 hover:border-white/20">
@@ -160,7 +160,7 @@
 
             <!-- Top Right: Action Buttons & Right Holiday Decor -->
             <div class="flex items-center space-x-3">
-                <div id="holidayDecorRight" class="text-2xl sm:text-3xl md:text-4xl holiday-decor select-none opacity-90 hidden sm:block"></div>
+                <div id="holidayDecorTopRight" class="text-2xl sm:text-3xl md:text-4xl holiday-decor select-none opacity-90 hidden sm:block"></div>
                 <div class="flex items-center space-x-2 edit-control">
                     <!-- Settings Pencil Trigger Button -->
                     <button id="editBtn" onclick="toggleSettingsModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all transform hover:scale-105 shadow-lg active:scale-95" title="Customize Screensaver">
@@ -234,15 +234,19 @@
             </div>
         </main>
 
-        <!-- Bottom Bar: Scrolling Marquee Ticker -->
-        <footer id="footerTicker" class="w-full bg-black/60 border-t border-white/10 py-2.5 overflow-hidden backdrop-blur-md rounded-xl z-10">
-            <div class="w-full overflow-hidden whitespace-nowrap relative flex items-center">
-                <div id="marqueeWrapper" class="marquee-wrapper">
-                    <span id="marqueeText1" class="text-xs sm:text-sm md:text-base tracking-widest font-light pr-12"></span>
-                    <span id="marqueeText2" class="text-xs sm:text-sm md:text-base tracking-widest font-light pr-12"></span>
+        <!-- Bottom Bar: Scrolling Marquee Ticker with Spaced Out Holiday Decors -->
+        <div class="w-full flex items-center space-x-3 z-10">
+            <div id="holidayDecorBottomLeft" class="text-2xl sm:text-3xl holiday-decor select-none opacity-90 pl-1"></div>
+            <footer id="footerTicker" class="flex-1 bg-black/60 border-t border-white/10 py-2.5 overflow-hidden backdrop-blur-md rounded-xl">
+                <div class="w-full overflow-hidden whitespace-nowrap relative flex items-center">
+                    <div id="marqueeWrapper" class="marquee-wrapper">
+                        <span id="marqueeText1" class="text-xs sm:text-sm md:text-base tracking-widest font-light pr-12"></span>
+                        <span id="marqueeText2" class="text-xs sm:text-sm md:text-base tracking-widest font-light pr-12"></span>
+                    </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
+            <div id="holidayDecorBottomRight" class="text-2xl sm:text-3xl holiday-decor select-none opacity-90 pr-1"></div>
+        </div>
 
     </div>
 
@@ -733,7 +737,6 @@
             }
         }
 
-        // Re-acquire wake lock if page visibility changes back to visible
         document.addEventListener('visibilitychange', async () => {
             if (wakeLock !== null && document.visibilityState === 'visible') {
                 await requestWakeLock();
@@ -902,18 +905,22 @@
             let bdayCardColor = appSettings.countdownColor;
             
             let activeThemeColors = appSettings.snowColors && appSettings.snowColors.length > 0 ? [...appSettings.snowColors] : ["#ffffff"];
-            let decorLeftHTML = "";
-            let decorRightHTML = "";
+            let decorTopLeft = "";
+            let decorTopRight = "";
+            let decorBottomLeft = "";
+            let decorBottomRight = "";
 
             if (appSettings.enableHolidayThemes) {
-                // Halloween Theme (Jack-o'-lanterns, no spiders)
+                // Halloween Theme (Jack-o'-lanterns, ghost, bat, no spiders)
                 if (isDateInRange(now, appSettings.halloweenStart, appSettings.halloweenEnd)) {
                     clockColor = "#FF7518";
                     dateColor = "#A855F7";
                     halloweenCardColor = "#FF7518";
                     activeThemeColors = ["#FF7518", "#A855F7"];
-                    decorLeftHTML = "🎃 🦇";
-                    decorRightHTML = "👻 🎃";
+                    decorTopLeft = "🎃";
+                    decorTopRight = "👻";
+                    decorBottomLeft = "🦇";
+                    decorBottomRight = "🎃";
                 }
                 // Christmas Theme (Trees and ornaments/gifts)
                 else if (isDateInRange(now, appSettings.christmasStart, appSettings.christmasEnd)) {
@@ -921,8 +928,11 @@
                     dateColor = "#22C55E";
                     xmasCardColor = "#EF4444";
                     activeThemeColors = ["#EF4444", "#22C55E"];
-                    decorLeftHTML = "🎄 🎁";
-                    decorRightHTML = "⭐ 🎄";
+                    decorTopLeft = "🎄";
+                    decorTopRight = "⭐";
+                    decorBottomLeft = "🎁";
+                    decorTopRight = "🎄";
+                    decorBottomRight = "🎁";
                 }
                 // Birthday Theme (Balloons)
                 else if (isDateInRange(now, appSettings.birthdayStart, appSettings.birthdayEnd)) {
@@ -930,15 +940,19 @@
                     dateColor = "#06B6D4";
                     bdayCardColor = "#3B82F6";
                     activeThemeColors = ["#3B82F6", "#06B6D4"];
-                    decorLeftHTML = "🎈 🎂";
-                    decorRightHTML = "🎁 🎈";
+                    decorTopLeft = "🎈";
+                    decorTopRight = "🎂";
+                    decorBottomLeft = "🎁";
+                    decorBottomRight = "🎈";
                 }
             }
 
             window.activeSnowPalette = activeThemeColors;
 
-            document.getElementById('holidayDecorLeft').innerHTML = decorLeftHTML;
-            document.getElementById('holidayDecorRight').innerHTML = decorRightHTML;
+            document.getElementById('holidayDecorTopLeft').innerHTML = decorTopLeft;
+            document.getElementById('holidayDecorTopRight').innerHTML = decorTopRight;
+            document.getElementById('holidayDecorBottomLeft').innerHTML = decorBottomLeft;
+            document.getElementById('holidayDecorBottomRight').innerHTML = decorBottomRight;
 
             document.getElementById('timeDisplay').style.color = clockColor;
             document.getElementById('dateDisplay').style.color = dateColor;
@@ -1312,7 +1326,7 @@
             factDisplay.style.color = appSettings.factColor;
 
             document.getElementById('factBox').style.display = appSettings.showFact ? 'block' : 'none';
-            document.getElementById('footerTicker').style.display = appSettings.showMarquee ? 'block' : 'none';
+            document.getElementById('footerTicker').parentElement.style.display = appSettings.showMarquee ? 'flex' : 'none';
 
             updateClockAndCountdowns();
             initSnowflakes();
@@ -1335,7 +1349,6 @@
             renderSnow();
             resetIdleTimer();
 
-            // Request Screen Wake Lock immediately to prevent Chromebook sleep/shut off
             requestWakeLock();
         };
     </script>
