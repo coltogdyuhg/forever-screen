@@ -132,6 +132,11 @@
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
+
+        /* Custom countdown card subtle entrance */
+        .countdown-card {
+            transition: all 0.25s ease;
+        }
     </style>
 </head>
 <body class="bg-black text-white select-none relative overflow-hidden">
@@ -174,10 +179,10 @@
             </div>
         </header>
 
-        <!-- Middle Content Area (Clock & Countdowns spread out with space in the middle) -->
+        <!-- Middle Content Area (Clock & Countdowns) -->
         <main class="flex-1 grid grid-cols-1 md:grid-cols-2 items-center justify-center my-auto px-2 md:px-8 lg:px-12 gap-10 lg:gap-24 z-10 w-full max-w-7xl mx-auto">
 
-            <!-- Left Side: Digital Clock & Date (Expanded box to prevent digit cutoff) -->
+            <!-- Left Side: Digital Clock & Date -->
             <div id="clockContainer" class="flex flex-col items-center md:items-end text-center md:text-right transition-all w-full">
                 <div class="min-w-[320px] sm:min-w-[420px] md:min-w-[500px] px-2">
                     <div id="timeDisplay" class="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold tracking-tight leading-none whitespace-nowrap">
@@ -189,11 +194,11 @@
                 </div>
             </div>
 
-            <!-- Right Side: Event Countdowns -->
-            <div id="countdownContainer" class="flex flex-col items-center md:items-start space-y-3.5 md:space-y-4 w-full max-w-md">
+            <!-- Right Side: Event Countdowns (built-in + custom) -->
+            <div id="countdownContainer" class="flex flex-col items-center md:items-start space-y-3.5 md:space-y-4 w-full max-w-md max-h-[70vh] overflow-y-auto pr-1">
 
                 <!-- Countdown 1: Christmas -->
-                <div class="countdown-card w-full bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition-all">
+                <div class="countdown-card w-full bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition-all" data-builtin="xmas">
                     <div class="flex justify-between items-center mb-1">
                         <span id="xmasLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
                             <i class="fa-solid fa-tree"></i> Christmas Countdown
@@ -206,7 +211,7 @@
                 </div>
 
                 <!-- Countdown 2: Halloween -->
-                <div class="countdown-card w-full bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition-all">
+                <div class="countdown-card w-full bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition-all" data-builtin="halloween">
                     <div class="flex justify-between items-center mb-1">
                         <span id="halloweenLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
                             <i class="fa-solid fa-ghost"></i> Halloween Countdown
@@ -219,7 +224,7 @@
                 </div>
 
                 <!-- Countdown 3: Birthday (March 28) -->
-                <div class="countdown-card w-full bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition-all">
+                <div class="countdown-card w-full bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition-all" data-builtin="bday">
                     <div class="flex justify-between items-center mb-1">
                         <span id="bdayLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
                             <i class="fa-solid fa-cake-candles"></i> Birthday Countdown
@@ -230,6 +235,8 @@
                         00d 00h 00m 00s
                     </div>
                 </div>
+
+                <!-- Custom countdowns injected here by JS -->
 
             </div>
         </main>
@@ -262,7 +269,7 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-bold tracking-wide">Screensaver Settings</h2>
-                        <p class="text-xs text-gray-400">Customize fonts, colors, multi-color snow & speeds</p>
+                        <p class="text-xs text-gray-400">Customize fonts, colors, multi-color snow, countdowns & speeds</p>
                     </div>
                 </div>
                 <button onclick="toggleSettingsModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-300 hover:text-white transition-colors">
@@ -472,7 +479,7 @@
                                 <span class="text-xs text-gray-300">Enable Auto Themes</span>
                             </label>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
                             <!-- Halloween Date Range -->
                             <div class="bg-black/40 p-3 rounded-xl border border-orange-500/30 flex flex-col justify-between">
                                 <div class="flex items-center justify-between text-xs font-semibold text-orange-400 mb-2">
@@ -481,11 +488,11 @@
                                 </div>
                                 <div class="space-y-1.5 text-xs">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">Start Date:</span>
+                                        <span class="text-[10px] text-gray-400">Start:</span>
                                         <input type="text" id="inputHalloweenStart" placeholder="MM-DD" value="10-24" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
                                     </div>
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">End Date:</span>
+                                        <span class="text-[10px] text-gray-400">End:</span>
                                         <input type="text" id="inputHalloweenEnd" placeholder="MM-DD" value="10-31" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
                                     </div>
                                 </div>
@@ -499,11 +506,11 @@
                                 </div>
                                 <div class="space-y-1.5 text-xs">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">Start Date:</span>
+                                        <span class="text-[10px] text-gray-400">Start:</span>
                                         <input type="text" id="inputChristmasStart" placeholder="MM-DD" value="11-01" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
                                     </div>
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">End Date:</span>
+                                        <span class="text-[10px] text-gray-400">End:</span>
                                         <input type="text" id="inputChristmasEnd" placeholder="MM-DD" value="12-26" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
                                     </div>
                                 </div>
@@ -517,16 +524,35 @@
                                 </div>
                                 <div class="space-y-1.5 text-xs">
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">Start Date:</span>
+                                        <span class="text-[10px] text-gray-400">Start:</span>
                                         <input type="text" id="inputBirthdayStart" placeholder="MM-DD" value="03-27" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
                                     </div>
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">End Date:</span>
+                                        <span class="text-[10px] text-gray-400">End:</span>
                                         <input type="text" id="inputBirthdayEnd" placeholder="MM-DD" value="03-28" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- New Year's Date Range -->
+                            <div class="bg-black/40 p-3 rounded-xl border border-yellow-400/40 flex flex-col justify-between">
+                                <div class="flex items-center justify-between text-xs font-semibold text-yellow-300 mb-2">
+                                    <span>🥂 New Year</span>
+                                    <span class="text-[10px] text-gray-400 font-mono">Gold/Silver</span>
+                                </div>
+                                <div class="space-y-1.5 text-xs">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] text-gray-400">Start:</span>
+                                        <input type="text" id="inputNewYearStart" placeholder="MM-DD" value="12-31" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] text-gray-400">End:</span>
+                                        <input type="text" id="inputNewYearEnd" placeholder="MM-DD" value="01-01" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <p class="text-[10px] text-gray-500 mt-2">New Year theme activates on Dec 31 (New Year's Eve) through Jan 1. It takes priority on those days over Christmas.</p>
                     </div>
 
                     <!-- Multi-Color Snow Palette Section (Up to 5 Colors) -->
@@ -551,6 +577,47 @@
                     </div>
                 </div>
 
+                <!-- Custom Countdowns Section -->
+                <div>
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-plus text-amber-400"></i> Custom Countdowns
+                    </h3>
+                    <div class="bg-white/5 border border-white/10 p-4 rounded-2xl space-y-4">
+                        <p class="text-[11px] text-gray-400">Add your own events. Choose <strong>Count Down</strong> (days until) or <strong>Count Up</strong> (days since). Use full date (YYYY-MM-DD) for one-time events or MM-DD for yearly recurring.</p>
+                        
+                        <!-- Add form -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[10px] text-gray-400 mb-1">Title</label>
+                                <input type="text" id="inputCustomTitle" placeholder="e.g. Days since last cruise" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-gray-400 mb-1">Date (YYYY-MM-DD or MM-DD)</label>
+                                <input type="text" id="inputCustomDate" placeholder="2025-06-15 or 06-15" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-gray-400 mb-1">Mode</label>
+                                <select id="selectCustomMode" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
+                                    <option value="countdown">Count Down (until)</option>
+                                    <option value="countup">Count Up (since)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-gray-400 mb-1">Icon (optional emoji or FA)</label>
+                                <input type="text" id="inputCustomIcon" placeholder="🚢 or leave blank" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
+                            </div>
+                        </div>
+                        <button onclick="addCustomCountdown()" class="w-full sm:w-auto px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-xl text-xs flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Add Countdown
+                        </button>
+
+                        <!-- List of existing custom countdowns -->
+                        <div id="customCountdownsList" class="space-y-2 pt-2 border-t border-white/10">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 3. Scrolling Marquee Content Customizer -->
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
@@ -559,7 +626,7 @@
                     <input type="text" id="inputMarquee" class="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-400 text-white placeholder-gray-500 transition-colors" placeholder="Enter custom marquee message...">
                 </div>
 
-                <!-- 4. Speed & Dynamics Sliders (Snow Speed + Marquee Speed) -->
+                <!-- 4. Speed & Dynamics Sliders -->
                 <div>
                     <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
                         <i class="fa-solid fa-gauge-high text-amber-400"></i> Speed & Dynamics Controls
@@ -628,7 +695,7 @@
                 <div class="flex items-center justify-between border-t border-white/10 pt-4">
                     <div>
                         <div class="text-xs font-medium">Daily Fun Fact</div>
-                        <div class="text-[11px] text-gray-400">Fetch another random daily curiosity</div>
+                        <div class="text-[11px] text-gray-400">Fetch another random daily curiosity (also auto-refreshes at midnight)</div>
                     </div>
                     <button onclick="generateRandomFact()" class="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all">
                         <i class="fa-solid fa-rotate"></i> New Fact
@@ -680,7 +747,11 @@
             christmasStart: "11-01",
             christmasEnd: "12-26",
             birthdayStart: "03-27",
-            birthdayEnd: "03-28"
+            birthdayEnd: "03-28",
+            newYearStart: "12-31",
+            newYearEnd: "01-01",
+            // Custom user countdowns
+            customCountdowns: []
         };
 
         const FONT_DISPLAY_NAMES = {
@@ -700,14 +771,15 @@
         };
 
         let appSettings = { ...DEFAULT_SETTINGS };
+        let lastFactDayOfYear = -1;
 
-        // Extensive Fact Library mapped dynamically across days
+        // Expanded Fact Library (rotates by day of year, refreshes at midnight)
         const FACTS_LIBRARY = [
             "Honey never spoils; archaeologists have found 3,000-year-old edible honey in Egyptian tombs.",
             "Bananas are naturally slightly radioactive because they contain high levels of potassium.",
             "Octopuses have three hearts and blue copper-based blood.",
             "A day on Venus is longer than a year on Venus.",
-            "Hot water will turn into ice faster than cold water under specific conditions (the Mpemba effect).",
+            "Hot water can freeze faster than cold water under specific conditions (the Mpemba effect).",
             "The Eiffel Tower can grow up to 15 cm taller during summer due to thermal expansion.",
             "Wombat poop is uniquely cube-shaped to prevent it from rolling away.",
             "There are more trees on Earth than stars in the Milky Way galaxy.",
@@ -717,7 +789,52 @@
             "Scotland's official national animal is the mythical Unicorn.",
             "Sea otters hold hands while sleeping so they don't drift apart.",
             "Sharks existed before trees appeared on planet Earth.",
-            "The total weight of all ants on Earth roughly equals the total weight of all humans."
+            "The total weight of all ants on Earth roughly equals the total weight of all humans.",
+            "A group of flamingos is called a flamboyance.",
+            "The shortest war in history lasted only 38–45 minutes (Britain vs Zanzibar, 1896).",
+            "Humans share about 60% of their DNA with bananas.",
+            "A bolt of lightning is five times hotter than the surface of the sun.",
+            "The inventor of the frisbee was turned into a frisbee himself after death (his ashes).",
+            "There is a species of jellyfish that is biologically immortal.",
+            "Oxford University is older than the Aztec Empire.",
+            "A single strand of spaghetti is called a spaghetto.",
+            "The heart of a blue whale is roughly the size of a small car.",
+            "Koalas have fingerprints that are almost identical to human ones.",
+            "The dot over the letter i is called a tittle.",
+            "Pineapples were once so expensive they were rented as status symbols at parties.",
+            "A crocodile cannot stick its tongue out.",
+            "The average person walks the equivalent of three times around the world in a lifetime.",
+            "Butterflies taste with their feet.",
+            "The first oranges weren't orange — they were green.",
+            "Sloths can hold their breath longer than dolphins (up to 40 minutes).",
+            "There are more possible iterations of a game of chess than atoms in the observable universe.",
+            "A day on Mercury lasts 176 Earth days.",
+            "The word \"queue\" is the only word in English pronounced the same when the last four letters are removed.",
+            "An octopus can taste with its tentacles and squeeze through tiny openings.",
+            "The Great Wall of China is not visible from space with the naked eye.",
+            "Cats have a unique \"fingerprint\" — their nose print.",
+            "Venus is the only planet that rotates clockwise (from our northern-hemisphere view).",
+            "A shrimp's heart is located in its head.",
+            "The longest recorded flight of a chicken is 13 seconds.",
+            "Your stomach gets a new lining every 3–4 days to avoid digesting itself.",
+            "There are more public libraries in the United States than McDonald's restaurants.",
+            "A group of crows is called a murder.",
+            "The plastic tips on the ends of shoelaces are called aglets.",
+            "Polar bears have black skin under their white fur.",
+            "The inventor of the telephone, Alexander Graham Bell, never phoned his wife or mother because they were deaf.",
+            "A falcon can dive at speeds over 240 mph (386 km/h).",
+            "The average cloud weighs about 1.1 million pounds.",
+            "Peanuts are not nuts — they are legumes.",
+            "The human nose can detect over 1 trillion different scents.",
+            "A snail can sleep for three years at a time.",
+            "The only letter that doesn't appear in the periodic table is J.",
+            "Elephants are the only mammals that can't jump.",
+            "The first computer mouse was made of wood.",
+            "A \"jiffy\" is an actual unit of time: 1/100th of a second.",
+            "The moon is moving away from Earth at about 3.8 cm per year.",
+            "There is enough DNA in the human body to stretch from the sun to Pluto and back — 17 times.",
+            "A blue whale's tongue can weigh as much as an adult elephant.",
+            "The national animal of Scotland is the unicorn, and it has been since the 12th century."
         ];
 
         /* ==========================================
@@ -808,7 +925,7 @@
 
         function initSnowflakes() {
             flakes = [];
-            const count = parseInt(appSettings.snowDensity);
+            const count = parseInt(appSettings.snowDensity) || 120;
             for (let i = 0; i < count; i++) {
                 const flake = new Snowflake();
                 flake.y = Math.random() * canvas.height;
@@ -837,16 +954,27 @@
             const startDate = new Date(currentYear, sM - 1, sD, 0, 0, 0);
             const endDate = new Date(currentYear, eM - 1, eD, 23, 59, 59);
 
+            // Handle year-crossing ranges (e.g. Dec 31 – Jan 1)
             if (startDate <= endDate) {
                 return now >= startDate && now <= endDate;
             } else {
-                return now >= startDate || now <= endDate;
+                // Crosses year boundary
+                const endNextYear = new Date(currentYear + 1, eM - 1, eD, 23, 59, 59);
+                const startPrevYear = new Date(currentYear - 1, sM - 1, sD, 0, 0, 0);
+                return (now >= startDate && now <= endNextYear) || (now >= startPrevYear && now <= endDate);
             }
+        }
+
+        function getDayOfYear(d) {
+            const start = new Date(d.getFullYear(), 0, 0);
+            const diff = d - start;
+            return Math.floor(diff / (1000 * 60 * 60 * 24));
         }
 
         function updateClockAndCountdowns() {
             const now = new Date();
 
+            // Time (12-hour)
             let hours = now.getHours();
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
@@ -863,6 +991,7 @@
 
             document.getElementById('dateDisplay').textContent = `${monthName} ${dayNum}, '${yearShort}`;
 
+            // Built-in countdowns
             const xmasTarget = getNextEventDate(11, 25);
             const halloweenTarget = getNextEventDate(9, 31);
             const bdayTarget = getNextEventDate(2, 28);
@@ -871,14 +1000,31 @@
             updateTargetCountdown('halloweenCountdown', halloweenTarget);
             updateTargetCountdown('bdayCountdown', bdayTarget);
 
+            // Custom countdowns
+            updateCustomCountdowns(now);
+
+            // Holiday themes
             applyHolidayThemeCheck(now);
+
+            // Refresh fact at midnight (when day of year changes)
+            const currentDayOfYear = getDayOfYear(now);
+            if (currentDayOfYear !== lastFactDayOfYear) {
+                lastFactDayOfYear = currentDayOfYear;
+                updateDailyFact();
+            }
         }
 
         function getNextEventDate(month, day) {
+            // month is 0-indexed
             const now = new Date();
-            let eventDate = new Date(now.getFullYear(), month, day);
-            if (now > eventDate && (now.getDate() !== day || now.getMonth() !== month)) {
-                eventDate = new Date(now.getFullYear() + 1, month, day);
+            let eventDate = new Date(now.getFullYear(), month, day, 0, 0, 0);
+            if (now > eventDate) {
+                // If today is the day, still show today's countdown (or 0)
+                if (now.getDate() === day && now.getMonth() === month) {
+                    // keep this year's
+                } else {
+                    eventDate = new Date(now.getFullYear() + 1, month, day, 0, 0, 0);
+                }
             }
             return eventDate;
         }
@@ -894,7 +1040,66 @@
             const seconds = Math.floor((diffMs / 1000) % 60);
 
             const pad = (n) => String(n).padStart(2, '0');
-            document.getElementById(elementId).textContent = `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+            const el = document.getElementById(elementId);
+            if (el) el.textContent = `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+        }
+
+        function parseCustomDate(dateStr, now) {
+            // Supports YYYY-MM-DD or MM-DD
+            dateStr = (dateStr || "").trim();
+            if (!dateStr) return null;
+
+            if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(dateStr)) {
+                const [y, m, d] = dateStr.split('-').map(Number);
+                return new Date(y, m - 1, d, 0, 0, 0);
+            }
+            if (/^\d{1,2}-\d{1,2}$/.test(dateStr)) {
+                const [m, d] = dateStr.split('-').map(Number);
+                let dt = new Date(now.getFullYear(), m - 1, d, 0, 0, 0);
+                return dt;
+            }
+            return null;
+        }
+
+        function formatCountdown(diffMs, isCountUp) {
+            const absMs = Math.abs(diffMs);
+            const days = Math.floor(absMs / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((absMs / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((absMs / 1000 / 60) % 60);
+            const seconds = Math.floor((absMs / 1000) % 60);
+            const pad = (n) => String(n).padStart(2, '0');
+            return `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+        }
+
+        function updateCustomCountdowns(now) {
+            const customs = appSettings.customCountdowns || [];
+            customs.forEach(cd => {
+                const el = document.getElementById(`custom-countdown-${cd.id}`);
+                if (!el) return;
+
+                let target = parseCustomDate(cd.date, now);
+                if (!target) {
+                    el.textContent = "Invalid date";
+                    return;
+                }
+
+                if (cd.mode === "countup") {
+                    // Days since the date. If date is in the future, show 0.
+                    let diffMs = now - target;
+                    if (diffMs < 0) diffMs = 0;
+                    el.textContent = formatCountdown(diffMs, true);
+                } else {
+                    // Countdown: for MM-DD, advance to next year if already passed
+                    if (/^\d{1,2}-\d{1,2}$/.test(cd.date.trim())) {
+                        if (now > target && !(now.getDate() === target.getDate() && now.getMonth() === target.getMonth())) {
+                            target = new Date(now.getFullYear() + 1, target.getMonth(), target.getDate(), 0, 0, 0);
+                        }
+                    }
+                    let diffMs = target - now;
+                    if (diffMs < 0) diffMs = 0;
+                    el.textContent = formatCountdown(diffMs, false);
+                }
+            });
         }
 
         function applyHolidayThemeCheck(now) {
@@ -911,8 +1116,18 @@
             let decorBottomRight = "";
 
             if (appSettings.enableHolidayThemes) {
-                // Halloween Theme (Jack-o'-lanterns, ghost, bat, no spiders)
-                if (isDateInRange(now, appSettings.halloweenStart, appSettings.halloweenEnd)) {
+                // New Year takes priority on Dec 31 / Jan 1
+                if (isDateInRange(now, appSettings.newYearStart || "12-31", appSettings.newYearEnd || "01-01")) {
+                    clockColor = "#FBBF24";      // gold
+                    dateColor = "#E5E7EB";       // silver/light
+                    activeThemeColors = ["#FBBF24", "#E5E7EB", "#A78BFA"];
+                    decorTopLeft = "🥂";
+                    decorTopRight = "🎆";
+                    decorBottomLeft = "✨";
+                    decorBottomRight = "🎉";
+                }
+                // Halloween
+                else if (isDateInRange(now, appSettings.halloweenStart, appSettings.halloweenEnd)) {
                     clockColor = "#FF7518";
                     dateColor = "#A855F7";
                     halloweenCardColor = "#FF7518";
@@ -922,7 +1137,7 @@
                     decorBottomLeft = "🦇";
                     decorBottomRight = "🎃";
                 }
-                // Christmas Theme (Trees and ornaments/gifts)
+                // Christmas
                 else if (isDateInRange(now, appSettings.christmasStart, appSettings.christmasEnd)) {
                     clockColor = "#EF4444";
                     dateColor = "#22C55E";
@@ -931,10 +1146,9 @@
                     decorTopLeft = "🎄";
                     decorTopRight = "⭐";
                     decorBottomLeft = "🎁";
-                    decorTopRight = "🎄";
-                    decorBottomRight = "🎁";
+                    decorBottomRight = "🎄";
                 }
-                // Birthday Theme (Balloons)
+                // Birthday
                 else if (isDateInRange(now, appSettings.birthdayStart, appSettings.birthdayEnd)) {
                     clockColor = "#3B82F6";
                     dateColor = "#06B6D4";
@@ -957,11 +1171,12 @@
             document.getElementById('timeDisplay').style.color = clockColor;
             document.getElementById('dateDisplay').style.color = dateColor;
 
-            const applyCardColors = (cardId, color) => {
-                const card = document.getElementById(cardId);
+            const applyCardColors = (countdownId, color) => {
+                const valueEl = document.getElementById(countdownId);
+                if (!valueEl) return;
+                const card = valueEl.closest('.countdown-card');
                 if (!card) return;
-                const valueEl = card.parentElement.querySelector('.countdown-value');
-                const labelEl = card.parentElement.querySelector('.countdown-label');
+                const labelEl = card.querySelector('.countdown-label');
                 if (valueEl) valueEl.style.color = color;
                 if (labelEl) labelEl.style.color = color;
             };
@@ -969,6 +1184,16 @@
             applyCardColors('xmasCountdown', xmasCardColor);
             applyCardColors('halloweenCountdown', halloweenCardColor);
             applyCardColors('bdayCountdown', bdayCardColor);
+
+            // Custom cards keep the general countdown color unless overridden later
+            document.querySelectorAll('[id^="custom-countdown-"]').forEach(el => {
+                el.style.color = appSettings.countdownColor;
+                const card = el.closest('.countdown-card');
+                if (card) {
+                    const lbl = card.querySelector('.countdown-label');
+                    if (lbl) lbl.style.color = appSettings.countdownColor;
+                }
+            });
 
             renderMarqueeText(activeThemeColors);
         }
@@ -978,13 +1203,10 @@
            ========================================== */
         function updateDailyFact() {
             const now = new Date();
-            const startOfYear = new Date(now.getFullYear(), 0, 0);
-            const diff = now - startOfYear;
-            const oneDay = 1000 * 60 * 60 * 24;
-            const dayOfYear = Math.floor(diff / oneDay);
-
+            const dayOfYear = getDayOfYear(now);
             const factIndex = dayOfYear % FACTS_LIBRARY.length;
             document.getElementById('factDisplay').textContent = `"${FACTS_LIBRARY[factIndex]}"`;
+            lastFactDayOfYear = dayOfYear;
         }
 
         function generateRandomFact() {
@@ -1108,7 +1330,108 @@
         }
 
         /* ==========================================
-           10. MODAL & PREFERENCES CONTROLLER
+           10. CUSTOM COUNTDOWNS
+           ========================================== */
+        function generateId() {
+            return 'cd_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+        }
+
+        function addCustomCountdown() {
+            const title = document.getElementById('inputCustomTitle').value.trim();
+            const date = document.getElementById('inputCustomDate').value.trim();
+            const mode = document.getElementById('selectCustomMode').value;
+            const icon = document.getElementById('inputCustomIcon').value.trim() || (mode === 'countup' ? '📅' : '⏳');
+
+            if (!title) {
+                alert('Please enter a title for the countdown.');
+                return;
+            }
+            if (!date || (!/^\d{4}-\d{1,2}-\d{1,2}$/.test(date) && !/^\d{1,2}-\d{1,2}$/.test(date))) {
+                alert('Please enter a valid date as YYYY-MM-DD (specific) or MM-DD (yearly).');
+                return;
+            }
+
+            if (!appSettings.customCountdowns) appSettings.customCountdowns = [];
+            appSettings.customCountdowns.push({
+                id: generateId(),
+                title,
+                date,
+                mode,
+                icon
+            });
+
+            // Clear form
+            document.getElementById('inputCustomTitle').value = '';
+            document.getElementById('inputCustomDate').value = '';
+            document.getElementById('inputCustomIcon').value = '';
+
+            renderCustomCountdownsList();
+            renderCustomCountdownCards();
+            updateClockAndCountdowns();
+        }
+
+        function removeCustomCountdown(id) {
+            appSettings.customCountdowns = (appSettings.customCountdowns || []).filter(c => c.id !== id);
+            renderCustomCountdownsList();
+            renderCustomCountdownCards();
+            updateClockAndCountdowns();
+        }
+
+        function renderCustomCountdownsList() {
+            const container = document.getElementById('customCountdownsList');
+            if (!container) return;
+            const list = appSettings.customCountdowns || [];
+            if (list.length === 0) {
+                container.innerHTML = '<p class="text-[11px] text-gray-500">No custom countdowns yet. Add one above.</p>';
+                return;
+            }
+            container.innerHTML = list.map(cd => `
+                <div class="flex items-center justify-between bg-black/40 border border-white/10 rounded-xl px-3 py-2">
+                    <div class="text-xs">
+                        <span class="font-medium">${cd.icon || ''} ${cd.title}</span>
+                        <span class="text-gray-400 ml-2 font-mono">${cd.date}</span>
+                        <span class="ml-2 px-1.5 py-0.5 rounded text-[10px] ${cd.mode === 'countup' ? 'bg-cyan-500/20 text-cyan-300' : 'bg-amber-500/20 text-amber-300'}">${cd.mode === 'countup' ? 'UP' : 'DOWN'}</span>
+                    </div>
+                    <button onclick="removeCustomCountdown('${cd.id}')" class="text-gray-400 hover:text-red-400 text-xs p-1">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function renderCustomCountdownCards() {
+            const container = document.getElementById('countdownContainer');
+            // Remove existing custom cards
+            container.querySelectorAll('[data-custom="true"]').forEach(el => el.remove());
+
+            const list = appSettings.customCountdowns || [];
+            list.forEach(cd => {
+                const card = document.createElement('div');
+                card.className = 'countdown-card w-full bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition-all';
+                card.setAttribute('data-custom', 'true');
+                card.setAttribute('data-id', cd.id);
+
+                const modeLabel = cd.mode === 'countup' ? 'Since' : 'Until';
+                const dateLabel = cd.date;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2 ${appSettings.countdownLabelFont}">
+                            <span>${cd.icon || (cd.mode === 'countup' ? '📅' : '⏳')}</span> ${cd.title}
+                        </span>
+                        <span class="text-xs text-gray-400 font-mono">${dateLabel}</span>
+                    </div>
+                    <div id="custom-countdown-${cd.id}" class="countdown-value text-lg sm:text-xl md:text-2xl font-semibold tracking-wide ${appSettings.countdownDigitFont}">
+                        00d 00h 00m 00s
+                    </div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">${modeLabel}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        /* ==========================================
+           11. MODAL & PREFERENCES CONTROLLER
            ========================================== */
         function toggleSettingsModal() {
             const modal = document.getElementById('settingsModal');
@@ -1154,8 +1477,11 @@
                 document.getElementById('inputChristmasEnd').value = appSettings.christmasEnd;
                 document.getElementById('inputBirthdayStart').value = appSettings.birthdayStart;
                 document.getElementById('inputBirthdayEnd').value = appSettings.birthdayEnd;
+                document.getElementById('inputNewYearStart').value = appSettings.newYearStart || "12-31";
+                document.getElementById('inputNewYearEnd').value = appSettings.newYearEnd || "01-01";
 
                 renderSnowColorsList();
+                renderCustomCountdownsList();
                 updateFontBadges();
 
                 modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -1230,6 +1556,10 @@
             appSettings.christmasEnd = document.getElementById('inputChristmasEnd').value.trim() || "12-26";
             appSettings.birthdayStart = document.getElementById('inputBirthdayStart').value.trim() || "03-27";
             appSettings.birthdayEnd = document.getElementById('inputBirthdayEnd').value.trim() || "03-28";
+            appSettings.newYearStart = document.getElementById('inputNewYearStart').value.trim() || "12-31";
+            appSettings.newYearEnd = document.getElementById('inputNewYearEnd').value.trim() || "01-01";
+
+            // customCountdowns already live in appSettings from add/remove
 
             try {
                 localStorage.setItem('cb_screensaver_settings', JSON.stringify(appSettings));
@@ -1254,7 +1584,11 @@
             try {
                 const stored = localStorage.getItem('cb_screensaver_settings');
                 if (stored) {
-                    appSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(stored) };
+                    const parsed = JSON.parse(stored);
+                    appSettings = { ...DEFAULT_SETTINGS, ...parsed };
+                    // Ensure arrays exist
+                    if (!Array.isArray(appSettings.customCountdowns)) appSettings.customCountdowns = [];
+                    if (!Array.isArray(appSettings.snowColors)) appSettings.snowColors = ["#ffffff"];
                 }
             } catch (e) {
                 appSettings = { ...DEFAULT_SETTINGS };
@@ -1328,12 +1662,13 @@
             document.getElementById('factBox').style.display = appSettings.showFact ? 'block' : 'none';
             document.getElementById('footerTicker').parentElement.style.display = appSettings.showMarquee ? 'flex' : 'none';
 
+            renderCustomCountdownCards();
             updateClockAndCountdowns();
             initSnowflakes();
         }
 
         /* ==========================================
-           11. APPLICATION INITIALIZATION
+           12. APPLICATION INITIALIZATION
            ========================================== */
         window.onload = function () {
             resizeCanvas();
