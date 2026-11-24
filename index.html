@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aesthetic Screensaver</title>
-    <!-- Tailwind CSS for modern responsive styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for rich custom typography options -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@500;700&family=Inter:wght@200;300;400;500;600&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Orbitron:wght@400;600;800&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Quicksand:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* Base Dark Screensaver Reset */
         body, html {
             margin: 0;
             padding: 0;
@@ -27,7 +23,6 @@
             user-select: none;
         }
 
-        /* Canvas background overlay */
         #snowCanvas {
             position: absolute;
             top: 0;
@@ -38,7 +33,6 @@
             z-index: 1;
         }
 
-        /* Screensaver Layer Stack */
         #appContainer {
             position: relative;
             z-index: 2;
@@ -49,7 +43,6 @@
             justify-content: space-between;
         }
 
-        /* Font Classes */
         .font-inter { font-family: 'Inter', sans-serif; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .font-mono { font-family: 'JetBrains Mono', monospace; }
@@ -64,18 +57,10 @@
         .font-pacifico { font-family: 'Pacifico', cursive; }
         .font-syne { font-family: 'Syne', sans-serif; }
 
-        /* Dynamic Glow Effects */
-        .glow-soft {
-            text-shadow: none;
-        }
-        .glow-intense {
-            text-shadow: 0 0 12px currentColor, 0 0 25px currentColor;
-        }
-        .glow-none {
-            text-shadow: none;
-        }
+        .glow-soft { text-shadow: none; }
+        .glow-intense { text-shadow: 0 0 12px currentColor, 0 0 25px currentColor; }
+        .glow-none { text-shadow: none; }
 
-        /* Smooth Continuous Marquee Animation */
         @keyframes marqueeContinuous {
             0% { transform: translateX(0%); }
             100% { transform: translateX(-50%); }
@@ -86,46 +71,25 @@
             animation: marqueeContinuous 25s linear infinite;
             will-change: transform;
         }
-        .marquee-wrapper:hover {
-            animation-play-state: running;
-        }
 
-        /* Holiday Decor Float Animation */
         @keyframes floatDecor {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-8px) rotate(3deg); }
         }
-        .holiday-decor {
-            animation: floatDecor 4s ease-in-out infinite;
-        }
+        .holiday-decor { animation: floatDecor 4s ease-in-out infinite; }
 
-        /* Custom Scrollbar for Settings Modal */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
 
-        /* Clean Interface Hiding Controls when Inactive/Fullscreen */
         .hide-controls .edit-control {
             opacity: 0 !important;
             pointer-events: none !important;
             transition: opacity 0.5s ease;
         }
+        .edit-control { transition: opacity 0.3s ease, transform 0.2s ease; }
 
-        .edit-control {
-            transition: opacity 0.3s ease, transform 0.2s ease;
-        }
-
-        /* Glassmorphism modal */
         .glass-panel {
             background: rgba(15, 15, 20, 0.92);
             backdrop-filter: blur(18px);
@@ -133,27 +97,125 @@
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
-        /* Custom countdown card subtle entrance */
-        .countdown-card {
-            transition: all 0.25s ease;
+        .countdown-card { transition: all 0.25s ease; }
+
+        /* ===== LAYOUT EDIT MODE ===== */
+        body.layout-edit-mode {
+            cursor: crosshair;
+        }
+        body.layout-edit-mode #appContainer {
+            /* keep structure but allow absolute children */
+        }
+        .movable {
+            position: relative;
+            transition: box-shadow 0.2s ease, outline 0.2s ease;
+        }
+        body.layout-edit-mode .movable {
+            outline: 2px dashed rgba(251, 191, 36, 0.55);
+            outline-offset: 4px;
+            cursor: grab;
+            z-index: 20;
+        }
+        body.layout-edit-mode .movable:hover {
+            outline-color: rgba(251, 191, 36, 0.95);
+            box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.15);
+        }
+        body.layout-edit-mode .movable.dragging {
+            cursor: grabbing;
+            outline-color: #fbbf24;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+            z-index: 50;
+            opacity: 0.95;
+        }
+        .movable.absolute-pos {
+            position: absolute !important;
+            margin: 0 !important;
+        }
+        .resize-handle {
+            display: none;
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: #fbbf24;
+            border: 2px solid #000;
+            border-radius: 4px;
+            right: -6px;
+            bottom: -6px;
+            cursor: nwse-resize;
+            z-index: 60;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+        body.layout-edit-mode .movable .resize-handle {
+            display: block;
+        }
+        #layoutToolbar {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(15, 15, 20, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            border-radius: 9999px;
+            padding: 10px 18px;
+            gap: 10px;
+            align-items: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        body.layout-edit-mode #layoutToolbar {
+            display: flex;
+        }
+        #layoutHint {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid rgba(251, 191, 36, 0.5);
+            color: #fbbf24;
+            font-size: 12px;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            pointer-events: none;
+            letter-spacing: 0.04em;
+        }
+        body.layout-edit-mode #layoutHint {
+            display: block;
+        }
+
+        /* Native date input dark styling */
+        input[type="date"] {
+            color-scheme: dark;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+            opacity: 0.8;
         }
     </style>
 </head>
 <body class="bg-black text-white select-none relative overflow-hidden">
 
-    <!-- Snow Animation Canvas -->
     <canvas id="snowCanvas"></canvas>
 
-    <!-- Main Screensaver Container -->
+    <!-- Layout edit hint + toolbar -->
+    <div id="layoutHint">Layout Edit Mode — drag elements • resize with corner handle • Esc or Done to exit</div>
+    <div id="layoutToolbar">
+        <span class="text-xs text-amber-300 font-semibold mr-1"><i class="fa-solid fa-arrows-up-down-left-right"></i> Editing Layout</span>
+        <button onclick="resetLayoutPositions()" class="px-3 py-1.5 rounded-full text-xs bg-white/10 hover:bg-white/20 border border-white/15">Reset Positions</button>
+        <button onclick="exitLayoutEditMode()" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-amber-400 hover:bg-amber-300 text-black">Done</button>
+    </div>
+
     <div id="appContainer" class="p-4 sm:p-6 md:p-8 flex flex-col justify-between h-full">
 
-        <!-- Top Bar: Daily Fun Fact & Controls -->
-        <header class="flex justify-between items-start z-10 w-full">
-            <!-- Left Corner Holiday Decor Widget -->
+        <header class="flex justify-between items-start z-10 w-full relative">
             <div id="holidayDecorTopLeft" class="text-2xl sm:text-3xl md:text-4xl holiday-decor select-none opacity-90"></div>
 
-            <!-- Top Center: Daily Fun Fact Box -->
-            <div id="factBox" class="max-w-xl text-center bg-black/40 backdrop-blur-md border border-white/10 px-5 py-2.5 rounded-2xl shadow-2xl transition-all duration-300 hover:border-white/20">
+            <div id="factBox" class="movable max-w-xl text-center bg-black/40 backdrop-blur-md border border-white/10 px-5 py-2.5 rounded-2xl shadow-2xl transition-all duration-300 hover:border-white/20" data-movable="factBox">
                 <div id="factHeader" class="flex items-center justify-center space-x-2 text-xs uppercase tracking-widest mb-0.5 font-semibold">
                     <i class="fa-solid fa-lightbulb"></i>
                     <span>Fact of the Day</span>
@@ -161,17 +223,15 @@
                 <p id="factDisplay" class="text-xs sm:text-sm font-light tracking-wide italic leading-relaxed">
                     Loading daily wisdom...
                 </p>
+                <div class="resize-handle" data-resize="factBox"></div>
             </div>
 
-            <!-- Top Right: Action Buttons & Right Holiday Decor -->
             <div class="flex items-center space-x-3">
                 <div id="holidayDecorTopRight" class="text-2xl sm:text-3xl md:text-4xl holiday-decor select-none opacity-90 hidden sm:block"></div>
                 <div class="flex items-center space-x-2 edit-control">
-                    <!-- Settings Pencil Trigger Button -->
                     <button id="editBtn" onclick="toggleSettingsModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all transform hover:scale-105 shadow-lg active:scale-95" title="Customize Screensaver">
                         <i class="fa-solid fa-pencil text-xs"></i>
                     </button>
-                    <!-- Fullscreen Toggle Button -->
                     <button id="fullscreenBtn" onclick="toggleFullscreen()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all transform hover:scale-105 shadow-lg active:scale-95" title="Toggle Fullscreen">
                         <i class="fa-solid fa-expand text-xs" id="fullscreenIcon"></i>
                     </button>
@@ -179,12 +239,11 @@
             </div>
         </header>
 
-        <!-- Middle Content Area (Clock & Countdowns) -->
-        <main class="flex-1 grid grid-cols-1 md:grid-cols-2 items-center justify-center my-auto px-2 md:px-8 lg:px-12 gap-10 lg:gap-24 z-10 w-full max-w-7xl mx-auto">
+        <main class="flex-1 grid grid-cols-1 md:grid-cols-2 items-center justify-center my-auto px-2 md:px-8 lg:px-12 gap-10 lg:gap-24 z-10 w-full max-w-7xl mx-auto relative">
 
-            <!-- Left Side: Digital Clock & Date -->
-            <div id="clockContainer" class="flex flex-col items-center md:items-end text-center md:text-right transition-all w-full">
-                <div class="min-w-[320px] sm:min-w-[420px] md:min-w-[500px] px-2">
+            <!-- Clock (movable + resizable) -->
+            <div id="clockContainer" class="movable flex flex-col items-center md:items-end text-center md:text-right transition-all w-full" data-movable="clock">
+                <div class="min-w-[280px] px-2" id="clockInner">
                     <div id="timeDisplay" class="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold tracking-tight leading-none whitespace-nowrap">
                         00:00:00
                     </div>
@@ -192,12 +251,11 @@
                 <div id="dateDisplay" class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light tracking-wider mt-3 md:mt-5 opacity-90 pr-2">
                     January 1, '26
                 </div>
+                <div class="resize-handle" data-resize="clock"></div>
             </div>
 
-            <!-- Right Side: Event Countdowns (built-in + custom) -->
-            <div id="countdownContainer" class="flex flex-col items-center md:items-start space-y-3.5 md:space-y-4 w-full max-w-md max-h-[70vh] overflow-y-auto pr-1">
-
-                <!-- Countdown 1: Christmas -->
+            <!-- Countdowns (movable as a group) -->
+            <div id="countdownContainer" class="movable flex flex-col items-center md:items-start space-y-3.5 md:space-y-4 w-full max-w-md max-h-[70vh] overflow-y-auto pr-1" data-movable="countdowns">
                 <div class="countdown-card w-full bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition-all" data-builtin="xmas">
                     <div class="flex justify-between items-center mb-1">
                         <span id="xmasLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
@@ -205,12 +263,8 @@
                         </span>
                         <span id="xmasDateLabel" class="text-xs text-gray-400 font-mono">Dec 25</span>
                     </div>
-                    <div id="xmasCountdown" class="countdown-value text-lg sm:text-xl md:text-2xl font-semibold tracking-wide">
-                        00d 00h 00m 00s
-                    </div>
+                    <div id="xmasCountdown" class="countdown-value text-lg sm:text-xl md:text-2xl font-semibold tracking-wide">00d 00h 00m 00s</div>
                 </div>
-
-                <!-- Countdown 2: Halloween -->
                 <div class="countdown-card w-full bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition-all" data-builtin="halloween">
                     <div class="flex justify-between items-center mb-1">
                         <span id="halloweenLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
@@ -218,12 +272,8 @@
                         </span>
                         <span id="halloweenDateLabel" class="text-xs text-gray-400 font-mono">Oct 31</span>
                     </div>
-                    <div id="halloweenCountdown" class="countdown-value text-lg sm:text-xl md:text-2xl font-semibold tracking-wide">
-                        00d 00h 00m 00s
-                    </div>
+                    <div id="halloweenCountdown" class="countdown-value text-lg sm:text-xl md:text-2xl font-semibold tracking-wide">00d 00h 00m 00s</div>
                 </div>
-
-                <!-- Countdown 3: Birthday (March 28) -->
                 <div class="countdown-card w-full bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition-all" data-builtin="bday">
                     <div class="flex justify-between items-center mb-1">
                         <span id="bdayLabel" class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2">
@@ -231,37 +281,31 @@
                         </span>
                         <span id="bdayDateLabel" class="text-xs text-gray-400 font-mono">Mar 28</span>
                     </div>
-                    <div id="bdayCountdown" class="countdown-value text-lg sm:text-xl md:text-2xl font-semibold tracking-wide">
-                        00d 00h 00m 00s
-                    </div>
+                    <div id="bdayCountdown" class="countdown-value text-lg sm:text-xl md:text-2xl font-semibold tracking-wide">00d 00h 00m 00s</div>
                 </div>
-
-                <!-- Custom countdowns injected here by JS -->
-
+                <div class="resize-handle" data-resize="countdowns"></div>
             </div>
         </main>
 
-        <!-- Bottom Bar: Scrolling Marquee Ticker with Spaced Out Holiday Decors -->
         <div class="w-full flex items-center space-x-3 z-10">
             <div id="holidayDecorBottomLeft" class="text-2xl sm:text-3xl holiday-decor select-none opacity-90 pl-1"></div>
-            <footer id="footerTicker" class="flex-1 bg-black/60 border-t border-white/10 py-2.5 overflow-hidden backdrop-blur-md rounded-xl">
+            <footer id="footerTicker" class="movable flex-1 bg-black/60 border-t border-white/10 py-2.5 overflow-hidden backdrop-blur-md rounded-xl" data-movable="marquee">
                 <div class="w-full overflow-hidden whitespace-nowrap relative flex items-center">
                     <div id="marqueeWrapper" class="marquee-wrapper">
                         <span id="marqueeText1" class="text-xs sm:text-sm md:text-base tracking-widest font-light pr-12"></span>
                         <span id="marqueeText2" class="text-xs sm:text-sm md:text-base tracking-widest font-light pr-12"></span>
                     </div>
                 </div>
+                <div class="resize-handle" data-resize="marquee"></div>
             </footer>
             <div id="holidayDecorBottomRight" class="text-2xl sm:text-3xl holiday-decor select-none opacity-90 pr-1"></div>
         </div>
-
     </div>
 
-    <!-- Edit & Customization Modal Window -->
+    <!-- Settings Modal -->
     <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
         <div class="glass-panel w-full max-w-3xl rounded-3xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto text-white shadow-2xl border border-white/20">
 
-            <!-- Modal Header -->
             <div class="flex justify-between items-center pb-4 border-b border-white/10 mb-6">
                 <div class="flex items-center space-x-3">
                     <div class="p-2 rounded-xl bg-white/10">
@@ -269,7 +313,7 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-bold tracking-wide">Screensaver Settings</h2>
-                        <p class="text-xs text-gray-400">Customize fonts, colors, multi-color snow, countdowns & speeds</p>
+                        <p class="text-xs text-gray-400">Fonts, colors, snow, custom countdowns & layout</p>
                     </div>
                 </div>
                 <button onclick="toggleSettingsModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-300 hover:text-white transition-colors">
@@ -277,14 +321,13 @@
                 </button>
             </div>
 
-            <!-- Settings Form Sections -->
             <div class="space-y-6">
 
-                <!-- Global Font Override Quick Action -->
+                <!-- Global Font -->
                 <div class="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3">
                     <div>
                         <div class="text-xs font-semibold uppercase tracking-wider text-amber-400">Global Quick Font Switch</div>
-                        <div class="text-xs text-gray-400">Apply a single font family across all components instantly</div>
+                        <div class="text-xs text-gray-400">Apply one font across everything</div>
                     </div>
                     <div class="flex items-center space-x-2 w-full md:w-auto">
                         <select id="selectGlobalFont" class="bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
@@ -303,134 +346,60 @@
                             <option value="font-space">Space Grotesk</option>
                             <option value="font-syne">Syne</option>
                         </select>
-                        <button onclick="applyGlobalFont()" class="px-3 py-2 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-xl text-xs whitespace-nowrap">
-                            Apply All
-                        </button>
+                        <button onclick="applyGlobalFont()" class="px-3 py-2 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-xl text-xs whitespace-nowrap">Apply All</button>
                     </div>
                 </div>
 
-                <!-- 1. Text & Element Font Customizers -->
+                <!-- Typography -->
                 <div>
                     <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-font text-amber-400"></i> Section Typography & Live Font Badges
+                        <i class="fa-solid fa-font text-amber-400"></i> Section Typography
                     </h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        
-                        <!-- Clock Font -->
                         <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
                             <label class="block text-[11px] font-medium text-gray-300 mb-1">Clock / Date Font</label>
                             <select id="selectClockFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
-                                <option value="font-inter">Inter</option>
-                                <option value="font-poppins">Poppins</option>
-                                <option value="font-montserrat">Montserrat</option>
-                                <option value="font-orbitron">Orbitron</option>
-                                <option value="font-mono">JetBrains Mono</option>
-                                <option value="font-courier">Courier Prime</option>
-                                <option value="font-playfair">Playfair Display</option>
-                                <option value="font-cinzel">Cinzel</option>
-                                <option value="font-cursive">Dancing Script</option>
-                                <option value="font-pacifico">Pacifico</option>
-                                <option value="font-quicksand">Quicksand</option>
-                                <option value="font-space">Space Grotesk</option>
-                                <option value="font-syne">Syne</option>
+                                <option value="font-inter">Inter</option><option value="font-poppins">Poppins</option><option value="font-montserrat">Montserrat</option><option value="font-orbitron">Orbitron</option><option value="font-mono">JetBrains Mono</option><option value="font-courier">Courier Prime</option><option value="font-playfair">Playfair Display</option><option value="font-cinzel">Cinzel</option><option value="font-cursive">Dancing Script</option><option value="font-pacifico">Pacifico</option><option value="font-quicksand">Quicksand</option><option value="font-space">Space Grotesk</option><option value="font-syne">Syne</option>
                             </select>
-                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between">
-                                <span>Active:</span>
-                                <span id="badgeClockFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span>
-                            </div>
+                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between"><span>Active:</span><span id="badgeClockFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span></div>
                         </div>
-
-                        <!-- Countdown Labels Font -->
                         <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
                             <label class="block text-[11px] font-medium text-gray-300 mb-1">Countdown Titles Font</label>
                             <select id="selectCountdownLabelFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
-                                <option value="font-inter">Inter</option>
-                                <option value="font-poppins">Poppins</option>
-                                <option value="font-montserrat">Montserrat</option>
-                                <option value="font-orbitron">Orbitron</option>
-                                <option value="font-mono">JetBrains Mono</option>
-                                <option value="font-courier">Courier Prime</option>
-                                <option value="font-playfair">Playfair Display</option>
-                                <option value="font-cinzel">Cinzel</option>
-                                <option value="font-cursive">Dancing Script</option>
-                                <option value="font-pacifico">Pacifico</option>
-                                <option value="font-quicksand">Quicksand</option>
-                                <option value="font-space">Space Grotesk</option>
-                                <option value="font-syne">Syne</option>
+                                <option value="font-inter">Inter</option><option value="font-poppins">Poppins</option><option value="font-montserrat">Montserrat</option><option value="font-orbitron">Orbitron</option><option value="font-mono">JetBrains Mono</option><option value="font-courier">Courier Prime</option><option value="font-playfair">Playfair Display</option><option value="font-cinzel">Cinzel</option><option value="font-cursive">Dancing Script</option><option value="font-pacifico">Pacifico</option><option value="font-quicksand">Quicksand</option><option value="font-space">Space Grotesk</option><option value="font-syne">Syne</option>
                             </select>
-                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between">
-                                <span>Active:</span>
-                                <span id="badgeCountdownLabelFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span>
-                            </div>
+                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between"><span>Active:</span><span id="badgeCountdownLabelFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span></div>
                         </div>
-
-                        <!-- Countdown Digits Font -->
                         <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
                             <label class="block text-[11px] font-medium text-amber-400 font-semibold mb-1">Countdown Digits Font</label>
                             <select id="selectCountdownDigitFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
-                                <option value="font-mono">JetBrains Mono</option>
-                                <option value="font-orbitron">Orbitron</option>
-                                <option value="font-inter">Inter</option>
-                                <option value="font-poppins">Poppins</option>
-                                <option value="font-montserrat">Montserrat</option>
-                                <option value="font-courier">Courier Prime</option>
-                                <option value="font-playfair">Playfair Display</option>
-                                <option value="font-cinzel">Cinzel</option>
-                                <option value="font-cursive">Dancing Script</option>
-                                <option value="font-space">Space Grotesk</option>
+                                <option value="font-mono">JetBrains Mono</option><option value="font-orbitron">Orbitron</option><option value="font-inter">Inter</option><option value="font-poppins">Poppins</option><option value="font-montserrat">Montserrat</option><option value="font-courier">Courier Prime</option><option value="font-playfair">Playfair Display</option><option value="font-cinzel">Cinzel</option><option value="font-cursive">Dancing Script</option><option value="font-space">Space Grotesk</option>
                             </select>
-                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between">
-                                <span>Active:</span>
-                                <span id="badgeCountdownDigitFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">JetBrains Mono</span>
-                            </div>
+                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between"><span>Active:</span><span id="badgeCountdownDigitFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">JetBrains Mono</span></div>
                         </div>
-
-                        <!-- Fact Font -->
                         <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
                             <label class="block text-[11px] font-medium text-gray-300 mb-1">Fun Fact Font</label>
                             <select id="selectFactFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
-                                <option value="font-inter">Inter</option>
-                                <option value="font-poppins">Poppins</option>
-                                <option value="font-montserrat">Montserrat</option>
-                                <option value="font-playfair">Playfair Display</option>
-                                <option value="font-cinzel">Cinzel</option>
-                                <option value="font-quicksand">Quicksand</option>
-                                <option value="font-space">Space Grotesk</option>
-                                <option value="font-syne">Syne</option>
+                                <option value="font-inter">Inter</option><option value="font-poppins">Poppins</option><option value="font-montserrat">Montserrat</option><option value="font-playfair">Playfair Display</option><option value="font-cinzel">Cinzel</option><option value="font-quicksand">Quicksand</option><option value="font-space">Space Grotesk</option><option value="font-syne">Syne</option>
                             </select>
-                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between">
-                                <span>Active:</span>
-                                <span id="badgeFactFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span>
-                            </div>
+                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between"><span>Active:</span><span id="badgeFactFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span></div>
                         </div>
-
-                        <!-- Marquee Font -->
-                        <div class="bg-white/5 p-3 rounded-2xl border border-white/10 sm:col-span-2 md:col-span-2">
+                        <div class="bg-white/5 p-3 rounded-2xl border border-white/10 sm:col-span-2">
                             <label class="block text-[11px] font-medium text-gray-300 mb-1">Scrolling Marquee Font</label>
                             <select id="selectMarqueeFont" onchange="updateFontBadges()" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
-                                <option value="font-inter">Inter</option>
-                                <option value="font-poppins">Poppins</option>
-                                <option value="font-montserrat">Montserrat</option>
-                                <option value="font-mono">JetBrains Mono</option>
-                                <option value="font-space">Space Grotesk</option>
-                                <option value="font-quicksand">Quicksand</option>
+                                <option value="font-inter">Inter</option><option value="font-poppins">Poppins</option><option value="font-montserrat">Montserrat</option><option value="font-mono">JetBrains Mono</option><option value="font-space">Space Grotesk</option><option value="font-quicksand">Quicksand</option>
                             </select>
-                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between">
-                                <span>Active:</span>
-                                <span id="badgeMarqueeFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span>
-                            </div>
+                            <div class="mt-2 text-[10px] text-gray-400 flex items-center justify-between"><span>Active:</span><span id="badgeMarqueeFont" class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px]">Inter</span></div>
                         </div>
-
                     </div>
                 </div>
 
-                <!-- 2. Individual Color Customizers & Multi-Color Snowfall Engine -->
+                <!-- Colors -->
                 <div>
                     <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
                         <i class="fa-solid fa-eye-dropper text-amber-400"></i> Individual Element Colors
                     </h3>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                        <!-- Clock Color -->
                         <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex flex-col justify-between">
                             <label class="text-[11px] font-medium text-gray-300 mb-2">Clock / Date</label>
                             <div class="flex items-center space-x-2">
@@ -438,8 +407,6 @@
                                 <span id="clockColorHex" class="text-[10px] font-mono text-gray-400">#ffffff</span>
                             </div>
                         </div>
-
-                        <!-- Countdown Color -->
                         <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex flex-col justify-between">
                             <label class="text-[11px] font-medium text-gray-300 mb-2">Countdowns</label>
                             <div class="flex items-center space-x-2">
@@ -447,8 +414,6 @@
                                 <span id="countdownColorHex" class="text-[10px] font-mono text-gray-400">#ffffff</span>
                             </div>
                         </div>
-
-                        <!-- Fun Fact Color -->
                         <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex flex-col justify-between">
                             <label class="text-[11px] font-medium text-gray-300 mb-2">Daily Fun Fact</label>
                             <div class="flex items-center space-x-2">
@@ -456,8 +421,6 @@
                                 <span id="factColorHex" class="text-[10px] font-mono text-gray-400">#ffffff</span>
                             </div>
                         </div>
-
-                        <!-- Marquee Color -->
                         <div class="bg-white/5 p-3 rounded-xl border border-white/10 flex flex-col justify-between">
                             <label class="text-[11px] font-medium text-gray-300 mb-2">Scrolling Text</label>
                             <div class="flex items-center space-x-2">
@@ -467,133 +430,87 @@
                         </div>
                     </div>
 
-                    <!-- Dynamic Holiday Theme Auto-Trigger Configuration -->
+                    <!-- Holiday Themes -->
                     <div class="bg-white/5 border border-white/10 p-4 rounded-2xl mb-4">
                         <div class="flex items-center justify-between mb-3">
                             <div>
                                 <div class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Holiday Theme Auto-Colors</div>
-                                <div class="text-[11px] text-gray-400">Auto-change clock, snow & marquee colors during specific calendar date ranges</div>
+                                <div class="text-[11px] text-gray-400">Auto theme by date range</div>
                             </div>
                             <label class="flex items-center space-x-2 cursor-pointer">
                                 <input type="checkbox" id="toggleHolidayThemes" checked class="accent-amber-400 w-4 h-4 rounded">
-                                <span class="text-xs text-gray-300">Enable Auto Themes</span>
+                                <span class="text-xs text-gray-300">Enable</span>
                             </label>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
-                            <!-- Halloween Date Range -->
-                            <div class="bg-black/40 p-3 rounded-xl border border-orange-500/30 flex flex-col justify-between">
-                                <div class="flex items-center justify-between text-xs font-semibold text-orange-400 mb-2">
-                                    <span>🎃 Halloween</span>
-                                    <span class="text-[10px] text-gray-400 font-mono">Orange/Purple</span>
-                                </div>
+                            <div class="bg-black/40 p-3 rounded-xl border border-orange-500/30">
+                                <div class="flex items-center justify-between text-xs font-semibold text-orange-400 mb-2"><span>🎃 Halloween</span><span class="text-[10px] text-gray-400">Orange/Purple</span></div>
                                 <div class="space-y-1.5 text-xs">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">Start:</span>
-                                        <input type="text" id="inputHalloweenStart" placeholder="MM-DD" value="10-24" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">End:</span>
-                                        <input type="text" id="inputHalloweenEnd" placeholder="MM-DD" value="10-31" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
-                                    </div>
+                                    <div class="flex items-center justify-between"><span class="text-[10px] text-gray-400">Start:</span><input type="text" id="inputHalloweenStart" value="10-24" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white"></div>
+                                    <div class="flex items-center justify-between"><span class="text-[10px] text-gray-400">End:</span><input type="text" id="inputHalloweenEnd" value="10-31" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white"></div>
                                 </div>
                             </div>
-
-                            <!-- Christmas Date Range -->
-                            <div class="bg-black/40 p-3 rounded-xl border border-emerald-500/30 flex flex-col justify-between">
-                                <div class="flex items-center justify-between text-xs font-semibold text-emerald-400 mb-2">
-                                    <span>🎄 Christmas</span>
-                                    <span class="text-[10px] text-gray-400 font-mono">Red/Green</span>
-                                </div>
+                            <div class="bg-black/40 p-3 rounded-xl border border-emerald-500/30">
+                                <div class="flex items-center justify-between text-xs font-semibold text-emerald-400 mb-2"><span>🎄 Christmas</span><span class="text-[10px] text-gray-400">Red/Green</span></div>
                                 <div class="space-y-1.5 text-xs">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">Start:</span>
-                                        <input type="text" id="inputChristmasStart" placeholder="MM-DD" value="11-01" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">End:</span>
-                                        <input type="text" id="inputChristmasEnd" placeholder="MM-DD" value="12-26" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
-                                    </div>
+                                    <div class="flex items-center justify-between"><span class="text-[10px] text-gray-400">Start:</span><input type="text" id="inputChristmasStart" value="11-01" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white"></div>
+                                    <div class="flex items-center justify-between"><span class="text-[10px] text-gray-400">End:</span><input type="text" id="inputChristmasEnd" value="12-26" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white"></div>
                                 </div>
                             </div>
-
-                            <!-- Birthday Date Range -->
-                            <div class="bg-black/40 p-3 rounded-xl border border-cyan-500/30 flex flex-col justify-between">
-                                <div class="flex items-center justify-between text-xs font-semibold text-cyan-400 mb-2">
-                                    <span>🎂 Birthday</span>
-                                    <span class="text-[10px] text-gray-400 font-mono">Blue/White</span>
-                                </div>
+                            <div class="bg-black/40 p-3 rounded-xl border border-cyan-500/30">
+                                <div class="flex items-center justify-between text-xs font-semibold text-cyan-400 mb-2"><span>🎂 Birthday</span><span class="text-[10px] text-gray-400">Blue/White</span></div>
                                 <div class="space-y-1.5 text-xs">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">Start:</span>
-                                        <input type="text" id="inputBirthdayStart" placeholder="MM-DD" value="03-27" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">End:</span>
-                                        <input type="text" id="inputBirthdayEnd" placeholder="MM-DD" value="03-28" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
-                                    </div>
+                                    <div class="flex items-center justify-between"><span class="text-[10px] text-gray-400">Start:</span><input type="text" id="inputBirthdayStart" value="03-27" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white"></div>
+                                    <div class="flex items-center justify-between"><span class="text-[10px] text-gray-400">End:</span><input type="text" id="inputBirthdayEnd" value="03-28" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white"></div>
                                 </div>
                             </div>
-
-                            <!-- New Year's Date Range -->
-                            <div class="bg-black/40 p-3 rounded-xl border border-yellow-400/40 flex flex-col justify-between">
-                                <div class="flex items-center justify-between text-xs font-semibold text-yellow-300 mb-2">
-                                    <span>🥂 New Year</span>
-                                    <span class="text-[10px] text-gray-400 font-mono">Gold/Silver</span>
-                                </div>
+                            <div class="bg-black/40 p-3 rounded-xl border border-yellow-400/40">
+                                <div class="flex items-center justify-between text-xs font-semibold text-yellow-300 mb-2"><span>🥂 New Year</span><span class="text-[10px] text-gray-400">Gold/Silver</span></div>
                                 <div class="space-y-1.5 text-xs">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">Start:</span>
-                                        <input type="text" id="inputNewYearStart" placeholder="MM-DD" value="12-31" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-[10px] text-gray-400">End:</span>
-                                        <input type="text" id="inputNewYearEnd" placeholder="MM-DD" value="01-01" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white">
-                                    </div>
+                                    <div class="flex items-center justify-between"><span class="text-[10px] text-gray-400">Start:</span><input type="text" id="inputNewYearStart" value="12-31" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white"></div>
+                                    <div class="flex items-center justify-between"><span class="text-[10px] text-gray-400">End:</span><input type="text" id="inputNewYearEnd" value="01-01" class="w-16 bg-slate-900 border border-white/20 rounded px-2 py-0.5 text-xs text-center font-mono text-white"></div>
                                 </div>
                             </div>
                         </div>
-                        <p class="text-[10px] text-gray-500 mt-2">New Year theme activates on Dec 31 (New Year's Eve) through Jan 1. It takes priority on those days over Christmas.</p>
+                        <p class="text-[10px] text-gray-500 mt-2">New Year activates Dec 31 – Jan 1 and overrides Christmas on those days.</p>
                     </div>
 
-                    <!-- Multi-Color Snow Palette Section (Up to 5 Colors) -->
+                    <!-- Snow palette -->
                     <div class="bg-white/5 border border-white/10 p-4 rounded-2xl">
                         <div class="flex items-center justify-between mb-3">
                             <div>
                                 <div class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Multi-Color Snow Palette</div>
-                                <div class="text-[11px] text-gray-400">Add up to 5 colors for a dynamic festive snowfall</div>
+                                <div class="text-[11px] text-gray-400">Up to 5 colors</div>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <input type="color" id="inputNewSnowColor" value="#22c55e" class="w-8 h-8 bg-transparent border border-white/20 rounded cursor-pointer">
-                                <button onclick="addSnowColor()" id="btnAddSnowColor" class="w-8 h-8 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-bold flex items-center justify-center text-sm shadow transition-all">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
+                                <button onclick="addSnowColor()" id="btnAddSnowColor" class="w-8 h-8 rounded-lg bg-amber-400 hover:bg-amber-300 text-black font-bold flex items-center justify-center text-sm shadow"><i class="fa-solid fa-plus"></i></button>
                             </div>
                         </div>
-
-                        <!-- Dynamic Snow Colors Container -->
-                        <div id="snowColorsList" class="flex flex-wrap gap-2 pt-1">
-                            <!-- Populated dynamically via JS -->
-                        </div>
+                        <div id="snowColorsList" class="flex flex-wrap gap-2 pt-1"></div>
                     </div>
                 </div>
 
-                <!-- Custom Countdowns Section -->
+                <!-- Custom Countdowns with DATE PICKER -->
                 <div>
                     <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
                         <i class="fa-solid fa-calendar-plus text-amber-400"></i> Custom Countdowns
                     </h3>
                     <div class="bg-white/5 border border-white/10 p-4 rounded-2xl space-y-4">
-                        <p class="text-[11px] text-gray-400">Add your own events. Choose <strong>Count Down</strong> (days until) or <strong>Count Up</strong> (days since). Use full date (YYYY-MM-DD) for one-time events or MM-DD for yearly recurring.</p>
+                        <p class="text-[11px] text-gray-400">Pick a date with the calendar. Use <strong>Count Down</strong> (until) or <strong>Count Up</strong> (since). For yearly events you can also type MM-DD after picking.</p>
                         
-                        <!-- Add form -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[10px] text-gray-400 mb-1">Title</label>
                                 <input type="text" id="inputCustomTitle" placeholder="e.g. Days since last cruise" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
                             </div>
                             <div>
-                                <label class="block text-[10px] text-gray-400 mb-1">Date (YYYY-MM-DD or MM-DD)</label>
-                                <input type="text" id="inputCustomDate" placeholder="2025-06-15 or 06-15" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white font-mono">
+                                <label class="block text-[10px] text-gray-400 mb-1">Date <span class="text-amber-400/80">(click to open calendar)</span></label>
+                                <div class="flex gap-2">
+                                    <input type="date" id="inputCustomDatePicker" class="flex-1 bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white cursor-pointer">
+                                    <input type="text" id="inputCustomDate" placeholder="or type MM-DD / YYYY-MM-DD" class="flex-1 bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white font-mono" title="Manual entry or yearly MM-DD">
+                                </div>
+                                <p class="text-[9px] text-gray-500 mt-1">Calendar sets full date. Text field also accepts yearly MM-DD.</p>
                             </div>
                             <div>
                                 <label class="block text-[10px] text-gray-400 mb-1">Mode</label>
@@ -603,124 +520,93 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-[10px] text-gray-400 mb-1">Icon (optional emoji or FA)</label>
-                                <input type="text" id="inputCustomIcon" placeholder="🚢 or leave blank" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
+                                <label class="block text-[10px] text-gray-400 mb-1">Icon (emoji, optional)</label>
+                                <input type="text" id="inputCustomIcon" placeholder="🚢 🎂 ✈️" class="w-full bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-amber-400 text-white">
                             </div>
                         </div>
                         <button onclick="addCustomCountdown()" class="w-full sm:w-auto px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-black font-semibold rounded-xl text-xs flex items-center justify-center gap-2">
                             <i class="fa-solid fa-plus"></i> Add Countdown
                         </button>
 
-                        <!-- List of existing custom countdowns -->
-                        <div id="customCountdownsList" class="space-y-2 pt-2 border-t border-white/10">
-                            <!-- Populated by JS -->
-                        </div>
+                        <div id="customCountdownsList" class="space-y-2 pt-2 border-t border-white/10"></div>
                     </div>
                 </div>
 
-                <!-- 3. Scrolling Marquee Content Customizer -->
+                <!-- Marquee text -->
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
-                        Bottom Scrolling Text Content
-                    </label>
-                    <input type="text" id="inputMarquee" class="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-400 text-white placeholder-gray-500 transition-colors" placeholder="Enter custom marquee message...">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Bottom Scrolling Text</label>
+                    <input type="text" id="inputMarquee" class="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-400 text-white placeholder-gray-500" placeholder="Enter custom marquee message...">
                 </div>
 
-                <!-- 4. Speed & Dynamics Sliders -->
+                <!-- Speeds -->
                 <div>
                     <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-gauge-high text-amber-400"></i> Speed & Dynamics Controls
+                        <i class="fa-solid fa-gauge-high text-amber-400"></i> Speed & Density
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <!-- Snowfall Speed -->
                         <div class="bg-white/5 p-3.5 rounded-2xl border border-white/10">
-                            <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">
-                                <span>Snow Speed</span>
-                                <span id="snowSpeedVal" class="text-amber-400 font-mono">1.0x</span>
-                            </div>
+                            <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2"><span>Snow Speed</span><span id="snowSpeedVal" class="text-amber-400 font-mono">1.0x</span></div>
                             <input type="range" id="inputSnowSpeed" min="0.2" max="4.0" step="0.1" value="1.0" class="w-full accent-amber-400 bg-white/10 rounded-lg cursor-pointer h-2">
                         </div>
-
-                        <!-- Snow Density -->
                         <div class="bg-white/5 p-3.5 rounded-2xl border border-white/10">
-                            <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">
-                                <span>Snow Density</span>
-                                <span id="snowDensityVal" class="text-amber-400 font-mono">120</span>
-                            </div>
+                            <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2"><span>Snow Density</span><span id="snowDensityVal" class="text-amber-400 font-mono">120</span></div>
                             <input type="range" id="inputSnowDensity" min="30" max="300" value="120" class="w-full accent-amber-400 bg-white/10 rounded-lg cursor-pointer h-2">
                         </div>
-
-                        <!-- Marquee Scroll Speed Slider -->
                         <div class="bg-white/5 p-3.5 rounded-2xl border border-white/10">
-                            <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2">
-                                <span>Marquee Speed</span>
-                                <span id="marqueeSpeedVal" class="text-amber-400 font-mono">25s</span>
-                            </div>
+                            <div class="flex justify-between text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2"><span>Marquee Speed</span><span id="marqueeSpeedVal" class="text-amber-400 font-mono">25s</span></div>
                             <input type="range" id="inputMarqueeSpeed" min="5" max="50" step="1" value="25" class="w-full accent-amber-400 bg-white/10 rounded-lg cursor-pointer h-2">
                         </div>
                     </div>
                 </div>
 
-                <!-- 5. Glow Effect & Display Toggles -->
+                <!-- Glow + toggles -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-white/10 pt-4">
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
-                            Clock Text Glow Effect
-                        </label>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Clock Text Glow</label>
                         <select id="selectGlow" class="w-full bg-slate-900 border border-white/15 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amber-400 text-white">
                             <option value="glow-soft">Soft Subtle Glow</option>
                             <option value="glow-intense">Neon Intense Glow</option>
-                            <option value="glow-none">No Glow (Pure Flat)</option>
+                            <option value="glow-none">No Glow</option>
                         </select>
                     </div>
-
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
-                            Visibility Toggles
-                        </label>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Visibility</label>
                         <div class="flex items-center space-x-3 text-xs">
                             <label class="flex items-center space-x-2 cursor-pointer bg-white/5 p-2.5 rounded-xl border border-white/10 flex-1">
-                                <input type="checkbox" id="toggleFact" checked class="accent-amber-400 w-4 h-4 rounded">
-                                <span>Show Daily Fact</span>
+                                <input type="checkbox" id="toggleFact" checked class="accent-amber-400 w-4 h-4 rounded"><span>Show Fact</span>
                             </label>
                             <label class="flex items-center space-x-2 cursor-pointer bg-white/5 p-2.5 rounded-xl border border-white/10 flex-1">
-                                <input type="checkbox" id="toggleMarquee" checked class="accent-amber-400 w-4 h-4 rounded">
-                                <span>Show Marquee</span>
+                                <input type="checkbox" id="toggleMarquee" checked class="accent-amber-400 w-4 h-4 rounded"><span>Show Marquee</span>
                             </label>
                         </div>
                     </div>
                 </div>
 
-                <!-- 6. Fact Refresh Option -->
                 <div class="flex items-center justify-between border-t border-white/10 pt-4">
                     <div>
                         <div class="text-xs font-medium">Daily Fun Fact</div>
-                        <div class="text-[11px] text-gray-400">Fetch another random daily curiosity (also auto-refreshes at midnight)</div>
+                        <div class="text-[11px] text-gray-400">Also auto-refreshes at midnight</div>
                     </div>
-                    <button onclick="generateRandomFact()" class="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all">
+                    <button onclick="generateRandomFact()" class="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-xs font-semibold flex items-center gap-2">
                         <i class="fa-solid fa-rotate"></i> New Fact
                     </button>
                 </div>
 
+                <div class="bg-amber-400/10 border border-amber-400/30 rounded-2xl p-3 text-[11px] text-amber-200/90">
+                    <strong class="text-amber-300">Tip:</strong> Double-click anywhere on the screensaver (outside buttons) to enter <strong>Layout Edit Mode</strong>. Drag the clock, countdowns, fact box or marquee. Use the yellow corner handle to resize. Press Esc or Done when finished.
+                </div>
             </div>
 
-            <!-- Modal Action Buttons -->
             <div class="flex items-center justify-end space-x-3 border-t border-white/10 pt-6 mt-6">
-                <button onclick="resetSettingsToDefault()" class="px-5 py-2.5 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                    Reset Defaults
-                </button>
-                <button onclick="saveAndApplySettings()" class="px-6 py-2.5 rounded-xl text-xs font-semibold bg-amber-400 hover:bg-amber-300 text-black shadow-lg transition-transform transform active:scale-95">
-                    Save Preferences
-                </button>
+                <button onclick="resetSettingsToDefault()" class="px-5 py-2.5 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-white/5">Reset Defaults</button>
+                <button onclick="saveAndApplySettings()" class="px-6 py-2.5 rounded-xl text-xs font-semibold bg-amber-400 hover:bg-amber-300 text-black shadow-lg">Save Preferences</button>
             </div>
-
         </div>
     </div>
 
-    <!-- Javascript Logic -->
     <script>
         /* ==========================================
-           1. APP STATE & PERSISTENT SETTINGS
+           1. APP STATE
            ========================================== */
         const DEFAULT_SETTINGS = {
             marqueeText: "✨ Welcome to your Chromebook Screensaver • Relax and enjoy the snowfall • Pure minimalist screen aesthetics ✨",
@@ -740,7 +626,6 @@
             glowStyle: "glow-soft",
             showFact: true,
             showMarquee: true,
-            // Specific Date Range Themes
             enableHolidayThemes: true,
             halloweenStart: "10-24",
             halloweenEnd: "10-31",
@@ -750,30 +635,27 @@
             birthdayEnd: "03-28",
             newYearStart: "12-31",
             newYearEnd: "01-01",
-            // Custom user countdowns
-            customCountdowns: []
+            customCountdowns: [],
+            // Layout positions (null = default flow layout)
+            layout: {
+                clock: null,
+                countdowns: null,
+                factBox: null,
+                marquee: null
+            }
         };
 
         const FONT_DISPLAY_NAMES = {
-            "font-inter": "Inter",
-            "font-poppins": "Poppins",
-            "font-montserrat": "Montserrat",
-            "font-orbitron": "Orbitron",
-            "font-mono": "JetBrains Mono",
-            "font-courier": "Courier Prime",
-            "font-playfair": "Playfair Display",
-            "font-cinzel": "Cinzel",
-            "font-cursive": "Dancing Script",
-            "font-pacifico": "Pacifico",
-            "font-quicksand": "Quicksand",
-            "font-space": "Space Grotesk",
-            "font-syne": "Syne"
+            "font-inter": "Inter", "font-poppins": "Poppins", "font-montserrat": "Montserrat",
+            "font-orbitron": "Orbitron", "font-mono": "JetBrains Mono", "font-courier": "Courier Prime",
+            "font-playfair": "Playfair Display", "font-cinzel": "Cinzel", "font-cursive": "Dancing Script",
+            "font-pacifico": "Pacifico", "font-quicksand": "Quicksand", "font-space": "Space Grotesk", "font-syne": "Syne"
         };
 
-        let appSettings = { ...DEFAULT_SETTINGS };
+        let appSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
         let lastFactDayOfYear = -1;
+        let layoutEditMode = false;
 
-        // Expanded Fact Library (rotates by day of year, refreshes at midnight)
         const FACTS_LIBRARY = [
             "Honey never spoils; archaeologists have found 3,000-year-old edible honey in Egyptian tombs.",
             "Bananas are naturally slightly radioactive because they contain high levels of potassium.",
@@ -794,7 +676,6 @@
             "The shortest war in history lasted only 38–45 minutes (Britain vs Zanzibar, 1896).",
             "Humans share about 60% of their DNA with bananas.",
             "A bolt of lightning is five times hotter than the surface of the sun.",
-            "The inventor of the frisbee was turned into a frisbee himself after death (his ashes).",
             "There is a species of jellyfish that is biologically immortal.",
             "Oxford University is older than the Aztec Empire.",
             "A single strand of spaghetti is called a spaghetto.",
@@ -803,27 +684,21 @@
             "The dot over the letter i is called a tittle.",
             "Pineapples were once so expensive they were rented as status symbols at parties.",
             "A crocodile cannot stick its tongue out.",
-            "The average person walks the equivalent of three times around the world in a lifetime.",
             "Butterflies taste with their feet.",
             "The first oranges weren't orange — they were green.",
             "Sloths can hold their breath longer than dolphins (up to 40 minutes).",
             "There are more possible iterations of a game of chess than atoms in the observable universe.",
             "A day on Mercury lasts 176 Earth days.",
-            "The word \"queue\" is the only word in English pronounced the same when the last four letters are removed.",
             "An octopus can taste with its tentacles and squeeze through tiny openings.",
-            "The Great Wall of China is not visible from space with the naked eye.",
             "Cats have a unique \"fingerprint\" — their nose print.",
             "Venus is the only planet that rotates clockwise (from our northern-hemisphere view).",
             "A shrimp's heart is located in its head.",
-            "The longest recorded flight of a chicken is 13 seconds.",
             "Your stomach gets a new lining every 3–4 days to avoid digesting itself.",
             "There are more public libraries in the United States than McDonald's restaurants.",
             "A group of crows is called a murder.",
             "The plastic tips on the ends of shoelaces are called aglets.",
             "Polar bears have black skin under their white fur.",
-            "The inventor of the telephone, Alexander Graham Bell, never phoned his wife or mother because they were deaf.",
             "A falcon can dive at speeds over 240 mph (386 km/h).",
-            "The average cloud weighs about 1.1 million pounds.",
             "Peanuts are not nuts — they are legumes.",
             "The human nose can detect over 1 trillion different scents.",
             "A snail can sleep for three years at a time.",
@@ -832,36 +707,38 @@
             "The first computer mouse was made of wood.",
             "A \"jiffy\" is an actual unit of time: 1/100th of a second.",
             "The moon is moving away from Earth at about 3.8 cm per year.",
-            "There is enough DNA in the human body to stretch from the sun to Pluto and back — 17 times.",
             "A blue whale's tongue can weigh as much as an adult elephant.",
-            "The national animal of Scotland is the unicorn, and it has been since the 12th century."
+            "The national animal of Scotland is the unicorn, and it has been since the 12th century.",
+            "The average person will spend about six months of their life waiting at red lights.",
+            "A group of hedgehogs is called a prickle.",
+            "The longest English word without a vowel is \"rhythms\".",
+            "Dolphins give each other unique names (signature whistles).",
+            "The average cloud weighs about 1.1 million pounds.",
+            "A giraffe's tongue is about 20 inches long and is usually black or dark blue.",
+            "The word \"set\" has the most definitions of any English word.",
+            "An adult human body contains enough carbon to make about 9,000 pencils."
         ];
 
         /* ==========================================
-           2. SCREEN WAKE LOCK API (KEEP AWAKE)
+           2. WAKE LOCK
            ========================================== */
         let wakeLock = null;
         async function requestWakeLock() {
             if ('wakeLock' in navigator) {
                 try {
                     wakeLock = await navigator.wakeLock.request('screen');
-                    wakeLock.addEventListener('release', () => {
-                        wakeLock = null;
-                    });
+                    wakeLock.addEventListener('release', () => { wakeLock = null; });
                 } catch (err) {
                     console.warn(`Wake Lock error: ${err.name}, ${err.message}`);
                 }
             }
         }
-
         document.addEventListener('visibilitychange', async () => {
-            if (wakeLock !== null && document.visibilityState === 'visible') {
-                await requestWakeLock();
-            }
+            if (wakeLock !== null && document.visibilityState === 'visible') await requestWakeLock();
         });
 
         /* ==========================================
-           3. CANVAS SNOW ANIMATION ENGINE (MULTI-COLOR)
+           3. SNOW
            ========================================== */
         const canvas = document.getElementById('snowCanvas');
         const ctx = canvas.getContext('2d');
@@ -869,11 +746,7 @@
 
         function hexToRgb(hex) {
             let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? {
-                r: parseInt(result[1], 16),
-                g: parseInt(result[2], 16),
-                b: parseInt(result[3], 16)
-            } : { r: 255, g: 255, b: 255 };
+            return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : { r: 255, g: 255, b: 255 };
         }
 
         function resizeCanvas() {
@@ -883,10 +756,7 @@
         }
 
         class Snowflake {
-            constructor() {
-                this.reset();
-            }
-
+            constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * -canvas.height;
@@ -896,24 +766,20 @@
                 this.opacity = Math.random() * 0.7 + 0.3;
                 this.swaySpeed = Math.random() * 0.02 + 0.005;
                 this.swayAngle = Math.random() * Math.PI * 2;
-                
-                const palette = (window.activeSnowPalette && window.activeSnowPalette.length > 0) 
-                    ? window.activeSnowPalette 
-                    : (appSettings.snowColors && appSettings.snowColors.length > 0 ? appSettings.snowColors : ["#ffffff"]);
+                const palette = (window.activeSnowPalette && window.activeSnowPalette.length > 0)
+                    ? window.activeSnowPalette
+                    : (appSettings.snowColors && appSettings.snowColors.length ? appSettings.snowColors : ["#ffffff"]);
                 this.colorHex = palette[Math.floor(Math.random() * palette.length)];
             }
-
             update() {
                 this.swayAngle += this.swaySpeed;
                 this.x += Math.sin(this.swayAngle) * 0.5 + this.wind;
                 this.y += this.speed;
-
                 if (this.y > canvas.height + 10 || this.x < -10 || this.x > canvas.width + 10) {
                     this.reset();
                     this.y = -5;
                 }
             }
-
             draw() {
                 const rgb = hexToRgb(this.colorHex);
                 ctx.beginPath();
@@ -935,30 +801,23 @@
 
         function renderSnow() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let flake of flakes) {
-                flake.update();
-                flake.draw();
-            }
+            for (let flake of flakes) { flake.update(); flake.draw(); }
             requestAnimationFrame(renderSnow);
         }
 
         /* ==========================================
-           4. LIVE CLOCK & COUNTDOWNS SYSTEM WITH HOLIDAY THEMES
+           4. CLOCK / COUNTDOWNS / THEMES
            ========================================== */
         function isDateInRange(now, startMMDD, endMMDD) {
             if (!startMMDD || !endMMDD) return false;
             const [sM, sD] = startMMDD.split('-').map(Number);
             const [eM, eD] = endMMDD.split('-').map(Number);
-            
             const currentYear = now.getFullYear();
             const startDate = new Date(currentYear, sM - 1, sD, 0, 0, 0);
             const endDate = new Date(currentYear, eM - 1, eD, 23, 59, 59);
-
-            // Handle year-crossing ranges (e.g. Dec 31 – Jan 1)
             if (startDate <= endDate) {
                 return now >= startDate && now <= endDate;
             } else {
-                // Crosses year boundary
                 const endNextYear = new Date(currentYear + 1, eM - 1, eD, 23, 59, 59);
                 const startPrevYear = new Date(currentYear - 1, sM - 1, sD, 0, 0, 0);
                 return (now >= startDate && now <= endNextYear) || (now >= startPrevYear && now <= endDate);
@@ -967,46 +826,28 @@
 
         function getDayOfYear(d) {
             const start = new Date(d.getFullYear(), 0, 0);
-            const diff = d - start;
-            return Math.floor(diff / (1000 * 60 * 60 * 24));
+            return Math.floor((d - start) / (1000 * 60 * 60 * 24));
         }
 
         function updateClockAndCountdowns() {
             const now = new Date();
-
-            // Time (12-hour)
             let hours = now.getHours();
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
             hours = hours ? hours : 12;
-
             document.getElementById('timeDisplay').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
 
             const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            const monthName = months[now.getMonth()];
-            const dayNum = now.getDate();
-            const yearShort = String(now.getFullYear()).slice(-2);
+            document.getElementById('dateDisplay').textContent = `${months[now.getMonth()]} ${now.getDate()}, '${String(now.getFullYear()).slice(-2)}`;
 
-            document.getElementById('dateDisplay').textContent = `${monthName} ${dayNum}, '${yearShort}`;
-
-            // Built-in countdowns
-            const xmasTarget = getNextEventDate(11, 25);
-            const halloweenTarget = getNextEventDate(9, 31);
-            const bdayTarget = getNextEventDate(2, 28);
-
-            updateTargetCountdown('xmasCountdown', xmasTarget);
-            updateTargetCountdown('halloweenCountdown', halloweenTarget);
-            updateTargetCountdown('bdayCountdown', bdayTarget);
-
-            // Custom countdowns
+            updateTargetCountdown('xmasCountdown', getNextEventDate(11, 25));
+            updateTargetCountdown('halloweenCountdown', getNextEventDate(9, 31));
+            updateTargetCountdown('bdayCountdown', getNextEventDate(2, 28));
             updateCustomCountdowns(now);
-
-            // Holiday themes
             applyHolidayThemeCheck(now);
 
-            // Refresh fact at midnight (when day of year changes)
             const currentDayOfYear = getDayOfYear(now);
             if (currentDayOfYear !== lastFactDayOfYear) {
                 lastFactDayOfYear = currentDayOfYear;
@@ -1015,53 +856,41 @@
         }
 
         function getNextEventDate(month, day) {
-            // month is 0-indexed
             const now = new Date();
             let eventDate = new Date(now.getFullYear(), month, day, 0, 0, 0);
-            if (now > eventDate) {
-                // If today is the day, still show today's countdown (or 0)
-                if (now.getDate() === day && now.getMonth() === month) {
-                    // keep this year's
-                } else {
-                    eventDate = new Date(now.getFullYear() + 1, month, day, 0, 0, 0);
-                }
+            if (now > eventDate && !(now.getDate() === day && now.getMonth() === month)) {
+                eventDate = new Date(now.getFullYear() + 1, month, day, 0, 0, 0);
             }
             return eventDate;
         }
 
         function updateTargetCountdown(elementId, targetDate) {
             const now = new Date();
-            let diffMs = targetDate - now;
-            if (diffMs < 0) diffMs = 0;
-
+            let diffMs = Math.max(0, targetDate - now);
             const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
             const minutes = Math.floor((diffMs / 1000 / 60) % 60);
             const seconds = Math.floor((diffMs / 1000) % 60);
-
             const pad = (n) => String(n).padStart(2, '0');
             const el = document.getElementById(elementId);
             if (el) el.textContent = `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
         }
 
         function parseCustomDate(dateStr, now) {
-            // Supports YYYY-MM-DD or MM-DD
             dateStr = (dateStr || "").trim();
             if (!dateStr) return null;
-
             if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(dateStr)) {
                 const [y, m, d] = dateStr.split('-').map(Number);
                 return new Date(y, m - 1, d, 0, 0, 0);
             }
             if (/^\d{1,2}-\d{1,2}$/.test(dateStr)) {
                 const [m, d] = dateStr.split('-').map(Number);
-                let dt = new Date(now.getFullYear(), m - 1, d, 0, 0, 0);
-                return dt;
+                return new Date(now.getFullYear(), m - 1, d, 0, 0, 0);
             }
             return null;
         }
 
-        function formatCountdown(diffMs, isCountUp) {
+        function formatCountdown(diffMs) {
             const absMs = Math.abs(diffMs);
             const days = Math.floor(absMs / (1000 * 60 * 60 * 24));
             const hours = Math.floor((absMs / (1000 * 60 * 60)) % 24);
@@ -1072,32 +901,22 @@
         }
 
         function updateCustomCountdowns(now) {
-            const customs = appSettings.customCountdowns || [];
-            customs.forEach(cd => {
+            (appSettings.customCountdowns || []).forEach(cd => {
                 const el = document.getElementById(`custom-countdown-${cd.id}`);
                 if (!el) return;
-
                 let target = parseCustomDate(cd.date, now);
-                if (!target) {
-                    el.textContent = "Invalid date";
-                    return;
-                }
+                if (!target) { el.textContent = "Invalid date"; return; }
 
                 if (cd.mode === "countup") {
-                    // Days since the date. If date is in the future, show 0.
-                    let diffMs = now - target;
-                    if (diffMs < 0) diffMs = 0;
-                    el.textContent = formatCountdown(diffMs, true);
+                    let diffMs = Math.max(0, now - target);
+                    el.textContent = formatCountdown(diffMs);
                 } else {
-                    // Countdown: for MM-DD, advance to next year if already passed
                     if (/^\d{1,2}-\d{1,2}$/.test(cd.date.trim())) {
                         if (now > target && !(now.getDate() === target.getDate() && now.getMonth() === target.getMonth())) {
                             target = new Date(now.getFullYear() + 1, target.getMonth(), target.getDate(), 0, 0, 0);
                         }
                     }
-                    let diffMs = target - now;
-                    if (diffMs < 0) diffMs = 0;
-                    el.textContent = formatCountdown(diffMs, false);
+                    el.textContent = formatCountdown(Math.max(0, target - now));
                 }
             });
         }
@@ -1108,84 +927,51 @@
             let xmasCardColor = appSettings.countdownColor;
             let halloweenCardColor = appSettings.countdownColor;
             let bdayCardColor = appSettings.countdownColor;
-            
-            let activeThemeColors = appSettings.snowColors && appSettings.snowColors.length > 0 ? [...appSettings.snowColors] : ["#ffffff"];
-            let decorTopLeft = "";
-            let decorTopRight = "";
-            let decorBottomLeft = "";
-            let decorBottomRight = "";
+            let activeThemeColors = appSettings.snowColors?.length ? [...appSettings.snowColors] : ["#ffffff"];
+            let decorTopLeft = "", decorTopRight = "", decorBottomLeft = "", decorBottomRight = "";
 
             if (appSettings.enableHolidayThemes) {
-                // New Year takes priority on Dec 31 / Jan 1
                 if (isDateInRange(now, appSettings.newYearStart || "12-31", appSettings.newYearEnd || "01-01")) {
-                    clockColor = "#FBBF24";      // gold
-                    dateColor = "#E5E7EB";       // silver/light
+                    clockColor = "#FBBF24"; dateColor = "#E5E7EB";
                     activeThemeColors = ["#FBBF24", "#E5E7EB", "#A78BFA"];
-                    decorTopLeft = "🥂";
-                    decorTopRight = "🎆";
-                    decorBottomLeft = "✨";
-                    decorBottomRight = "🎉";
-                }
-                // Halloween
-                else if (isDateInRange(now, appSettings.halloweenStart, appSettings.halloweenEnd)) {
-                    clockColor = "#FF7518";
-                    dateColor = "#A855F7";
-                    halloweenCardColor = "#FF7518";
+                    decorTopLeft = "🥂"; decorTopRight = "🎆"; decorBottomLeft = "✨"; decorBottomRight = "🎉";
+                } else if (isDateInRange(now, appSettings.halloweenStart, appSettings.halloweenEnd)) {
+                    clockColor = "#FF7518"; dateColor = "#A855F7"; halloweenCardColor = "#FF7518";
                     activeThemeColors = ["#FF7518", "#A855F7"];
-                    decorTopLeft = "🎃";
-                    decorTopRight = "👻";
-                    decorBottomLeft = "🦇";
-                    decorBottomRight = "🎃";
-                }
-                // Christmas
-                else if (isDateInRange(now, appSettings.christmasStart, appSettings.christmasEnd)) {
-                    clockColor = "#EF4444";
-                    dateColor = "#22C55E";
-                    xmasCardColor = "#EF4444";
+                    decorTopLeft = "🎃"; decorTopRight = "👻"; decorBottomLeft = "🦇"; decorBottomRight = "🎃";
+                } else if (isDateInRange(now, appSettings.christmasStart, appSettings.christmasEnd)) {
+                    clockColor = "#EF4444"; dateColor = "#22C55E"; xmasCardColor = "#EF4444";
                     activeThemeColors = ["#EF4444", "#22C55E"];
-                    decorTopLeft = "🎄";
-                    decorTopRight = "⭐";
-                    decorBottomLeft = "🎁";
-                    decorBottomRight = "🎄";
-                }
-                // Birthday
-                else if (isDateInRange(now, appSettings.birthdayStart, appSettings.birthdayEnd)) {
-                    clockColor = "#3B82F6";
-                    dateColor = "#06B6D4";
-                    bdayCardColor = "#3B82F6";
+                    decorTopLeft = "🎄"; decorTopRight = "⭐"; decorBottomLeft = "🎁"; decorBottomRight = "🎄";
+                } else if (isDateInRange(now, appSettings.birthdayStart, appSettings.birthdayEnd)) {
+                    clockColor = "#3B82F6"; dateColor = "#06B6D4"; bdayCardColor = "#3B82F6";
                     activeThemeColors = ["#3B82F6", "#06B6D4"];
-                    decorTopLeft = "🎈";
-                    decorTopRight = "🎂";
-                    decorBottomLeft = "🎁";
-                    decorBottomRight = "🎈";
+                    decorTopLeft = "🎈"; decorTopRight = "🎂"; decorBottomLeft = "🎁"; decorBottomRight = "🎈";
                 }
             }
 
             window.activeSnowPalette = activeThemeColors;
-
             document.getElementById('holidayDecorTopLeft').innerHTML = decorTopLeft;
             document.getElementById('holidayDecorTopRight').innerHTML = decorTopRight;
             document.getElementById('holidayDecorBottomLeft').innerHTML = decorBottomLeft;
             document.getElementById('holidayDecorBottomRight').innerHTML = decorBottomRight;
-
             document.getElementById('timeDisplay').style.color = clockColor;
             document.getElementById('dateDisplay').style.color = dateColor;
 
-            const applyCardColors = (countdownId, color) => {
-                const valueEl = document.getElementById(countdownId);
+            const applyCard = (id, color) => {
+                const valueEl = document.getElementById(id);
                 if (!valueEl) return;
                 const card = valueEl.closest('.countdown-card');
-                if (!card) return;
-                const labelEl = card.querySelector('.countdown-label');
-                if (valueEl) valueEl.style.color = color;
-                if (labelEl) labelEl.style.color = color;
+                if (card) {
+                    valueEl.style.color = color;
+                    const lbl = card.querySelector('.countdown-label');
+                    if (lbl) lbl.style.color = color;
+                }
             };
+            applyCard('xmasCountdown', xmasCardColor);
+            applyCard('halloweenCountdown', halloweenCardColor);
+            applyCard('bdayCountdown', bdayCardColor);
 
-            applyCardColors('xmasCountdown', xmasCardColor);
-            applyCardColors('halloweenCountdown', halloweenCardColor);
-            applyCardColors('bdayCountdown', bdayCardColor);
-
-            // Custom cards keep the general countdown color unless overridden later
             document.querySelectorAll('[id^="custom-countdown-"]').forEach(el => {
                 el.style.color = appSettings.countdownColor;
                 const card = el.closest('.countdown-card');
@@ -1199,55 +985,38 @@
         }
 
         /* ==========================================
-           5. DAILY FUN FACT ENGINE
+           5. FACTS
            ========================================== */
         function updateDailyFact() {
-            const now = new Date();
-            const dayOfYear = getDayOfYear(now);
-            const factIndex = dayOfYear % FACTS_LIBRARY.length;
-            document.getElementById('factDisplay').textContent = `"${FACTS_LIBRARY[factIndex]}"`;
+            const dayOfYear = getDayOfYear(new Date());
+            document.getElementById('factDisplay').textContent = `"${FACTS_LIBRARY[dayOfYear % FACTS_LIBRARY.length]}"`;
             lastFactDayOfYear = dayOfYear;
         }
-
         function generateRandomFact() {
-            const randomIndex = Math.floor(Math.random() * FACTS_LIBRARY.length);
-            document.getElementById('factDisplay').textContent = `"${FACTS_LIBRARY[randomIndex]}"`;
+            document.getElementById('factDisplay').textContent = `"${FACTS_LIBRARY[Math.floor(Math.random() * FACTS_LIBRARY.length)]}"`;
         }
 
         /* ==========================================
-           6. IDLE CURSOR & CONTROL HIDING ENGINE
+           6. IDLE + FULLSCREEN
            ========================================== */
         let idleTimer = null;
-        const IDLE_TIMEOUT = 4000;
-
         function resetIdleTimer() {
+            if (layoutEditMode) return;
             document.body.classList.remove('hide-controls');
             clearTimeout(idleTimer);
-
-            idleTimer = setTimeout(() => {
-                document.body.classList.add('hide-controls');
-            }, IDLE_TIMEOUT);
+            idleTimer = setTimeout(() => document.body.classList.add('hide-controls'), 4000);
         }
-
         window.addEventListener('mousemove', resetIdleTimer);
         window.addEventListener('touchstart', resetIdleTimer);
         window.addEventListener('keydown', resetIdleTimer);
 
-        /* ==========================================
-           7. FULLSCREEN CONTROLLER
-           ========================================== */
         function toggleFullscreen() {
             if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.warn(`Error attempting fullscreen: ${err.message}`);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
+                document.documentElement.requestFullscreen().catch(err => console.warn(err.message));
+            } else if (document.exitFullscreen) {
+                document.exitFullscreen();
             }
         }
-
         document.addEventListener('fullscreenchange', () => {
             const icon = document.getElementById('fullscreenIcon');
             if (document.fullscreenElement) {
@@ -1260,27 +1029,21 @@
         });
 
         /* ==========================================
-           8. MULTI-COLOR SNOW PALETTE CONTROLLER
+           7. SNOW COLORS UI
            ========================================== */
         function renderSnowColorsList() {
             const container = document.getElementById('snowColorsList');
             container.innerHTML = '';
-
             appSettings.snowColors.forEach((colorHex, index) => {
                 const item = document.createElement('div');
                 item.className = "flex items-center space-x-1.5 bg-black/40 border border-white/15 px-2.5 py-1 rounded-xl";
                 item.innerHTML = `
-                    <span class="w-3.5 h-3.5 rounded-full border border-white/30" style="background-color: ${colorHex}"></span>
+                    <span class="w-3.5 h-3.5 rounded-full border border-white/30" style="background-color:${colorHex}"></span>
                     <span class="text-[10px] font-mono text-gray-300">${colorHex}</span>
-                    ${appSettings.snowColors.length > 1 ? `
-                        <button onclick="removeSnowColor(${index})" class="text-gray-400 hover:text-red-400 text-xs ml-1">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    ` : ''}
+                    ${appSettings.snowColors.length > 1 ? `<button onclick="removeSnowColor(${index})" class="text-gray-400 hover:text-red-400 text-xs ml-1"><i class="fa-solid fa-xmark"></i></button>` : ''}
                 `;
                 container.appendChild(item);
             });
-
             const btnAdd = document.getElementById('btnAddSnowColor');
             if (appSettings.snowColors.length >= 5) {
                 btnAdd.disabled = true;
@@ -1290,14 +1053,11 @@
                 btnAdd.classList.remove('opacity-50', 'cursor-not-allowed');
             }
         }
-
         function addSnowColor() {
             if (appSettings.snowColors.length >= 5) return;
-            const newColor = document.getElementById('inputNewSnowColor').value;
-            appSettings.snowColors.push(newColor);
+            appSettings.snowColors.push(document.getElementById('inputNewSnowColor').value);
             renderSnowColorsList();
         }
-
         function removeSnowColor(index) {
             if (appSettings.snowColors.length <= 1) return;
             appSettings.snowColors.splice(index, 1);
@@ -1305,64 +1065,64 @@
         }
 
         /* ==========================================
-           9. LIVE FONT BADGES UPDATER
+           8. FONT BADGES
            ========================================== */
         function updateFontBadges() {
-            const clockFont = document.getElementById('selectClockFont').value;
-            const labelFont = document.getElementById('selectCountdownLabelFont').value;
-            const digitFont = document.getElementById('selectCountdownDigitFont').value;
-            const factFont = document.getElementById('selectFactFont').value;
-            const marqueeFont = document.getElementById('selectMarqueeFont').value;
-
-            const updateBadge = (badgeId, fontClass) => {
+            const map = {
+                badgeClockFont: 'selectClockFont',
+                badgeCountdownLabelFont: 'selectCountdownLabelFont',
+                badgeCountdownDigitFont: 'selectCountdownDigitFont',
+                badgeFactFont: 'selectFactFont',
+                badgeMarqueeFont: 'selectMarqueeFont'
+            };
+            for (const [badgeId, selectId] of Object.entries(map)) {
+                const fontClass = document.getElementById(selectId).value;
                 const el = document.getElementById(badgeId);
                 if (el) {
                     el.textContent = FONT_DISPLAY_NAMES[fontClass] || fontClass;
                     el.className = `px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 text-xs truncate max-w-[120px] ${fontClass}`;
                 }
-            };
-
-            updateBadge('badgeClockFont', clockFont);
-            updateBadge('badgeCountdownLabelFont', labelFont);
-            updateBadge('badgeCountdownDigitFont', digitFont);
-            updateBadge('badgeFactFont', factFont);
-            updateBadge('badgeMarqueeFont', marqueeFont);
+            }
         }
 
         /* ==========================================
-           10. CUSTOM COUNTDOWNS
+           9. CUSTOM COUNTDOWNS
            ========================================== */
         function generateId() {
             return 'cd_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
         }
 
+        // Sync date picker → text field
+        document.addEventListener('DOMContentLoaded', () => {
+            const picker = document.getElementById('inputCustomDatePicker');
+            const text = document.getElementById('inputCustomDate');
+            if (picker && text) {
+                picker.addEventListener('change', () => {
+                    if (picker.value) text.value = picker.value; // YYYY-MM-DD
+                });
+            }
+        });
+
         function addCustomCountdown() {
             const title = document.getElementById('inputCustomTitle').value.trim();
-            const date = document.getElementById('inputCustomDate').value.trim();
+            let date = document.getElementById('inputCustomDate').value.trim();
+            const pickerVal = document.getElementById('inputCustomDatePicker').value;
+            if (!date && pickerVal) date = pickerVal;
             const mode = document.getElementById('selectCustomMode').value;
             const icon = document.getElementById('inputCustomIcon').value.trim() || (mode === 'countup' ? '📅' : '⏳');
 
-            if (!title) {
-                alert('Please enter a title for the countdown.');
-                return;
-            }
+            if (!title) { alert('Please enter a title.'); return; }
             if (!date || (!/^\d{4}-\d{1,2}-\d{1,2}$/.test(date) && !/^\d{1,2}-\d{1,2}$/.test(date))) {
-                alert('Please enter a valid date as YYYY-MM-DD (specific) or MM-DD (yearly).');
+                alert('Please pick a date from the calendar or type YYYY-MM-DD / MM-DD.');
                 return;
             }
 
             if (!appSettings.customCountdowns) appSettings.customCountdowns = [];
-            appSettings.customCountdowns.push({
-                id: generateId(),
-                title,
-                date,
-                mode,
-                icon
-            });
+            appSettings.customCountdowns.push({ id: generateId(), title, date, mode, icon });
 
-            // Clear form
             document.getElementById('inputCustomTitle').value = '';
             document.getElementById('inputCustomDate').value = '';
+            document.getElementById('inputCustomDatePicker').value = '';
             document.getElementById('inputCustomIcon').value = '';
 
             renderCustomCountdownsList();
@@ -1381,8 +1141,8 @@
             const container = document.getElementById('customCountdownsList');
             if (!container) return;
             const list = appSettings.customCountdowns || [];
-            if (list.length === 0) {
-                container.innerHTML = '<p class="text-[11px] text-gray-500">No custom countdowns yet. Add one above.</p>';
+            if (!list.length) {
+                container.innerHTML = '<p class="text-[11px] text-gray-500">No custom countdowns yet.</p>';
                 return;
             }
             container.innerHTML = list.map(cd => `
@@ -1392,84 +1152,273 @@
                         <span class="text-gray-400 ml-2 font-mono">${cd.date}</span>
                         <span class="ml-2 px-1.5 py-0.5 rounded text-[10px] ${cd.mode === 'countup' ? 'bg-cyan-500/20 text-cyan-300' : 'bg-amber-500/20 text-amber-300'}">${cd.mode === 'countup' ? 'UP' : 'DOWN'}</span>
                     </div>
-                    <button onclick="removeCustomCountdown('${cd.id}')" class="text-gray-400 hover:text-red-400 text-xs p-1">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
+                    <button onclick="removeCustomCountdown('${cd.id}')" class="text-gray-400 hover:text-red-400 text-xs p-1"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `).join('');
         }
 
         function renderCustomCountdownCards() {
             const container = document.getElementById('countdownContainer');
-            // Remove existing custom cards
             container.querySelectorAll('[data-custom="true"]').forEach(el => el.remove());
-
-            const list = appSettings.customCountdowns || [];
-            list.forEach(cd => {
+            (appSettings.customCountdowns || []).forEach(cd => {
                 const card = document.createElement('div');
                 card.className = 'countdown-card w-full bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm hover:bg-white/10 transition-all';
                 card.setAttribute('data-custom', 'true');
-                card.setAttribute('data-id', cd.id);
-
-                const modeLabel = cd.mode === 'countup' ? 'Since' : 'Until';
-                const dateLabel = cd.date;
-
                 card.innerHTML = `
                     <div class="flex justify-between items-center mb-1">
                         <span class="countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2 ${appSettings.countdownLabelFont}">
                             <span>${cd.icon || (cd.mode === 'countup' ? '📅' : '⏳')}</span> ${cd.title}
                         </span>
-                        <span class="text-xs text-gray-400 font-mono">${dateLabel}</span>
+                        <span class="text-xs text-gray-400 font-mono">${cd.date}</span>
                     </div>
-                    <div id="custom-countdown-${cd.id}" class="countdown-value text-lg sm:text-xl md:text-2xl font-semibold tracking-wide ${appSettings.countdownDigitFont}">
-                        00d 00h 00m 00s
-                    </div>
-                    <div class="text-[10px] text-gray-500 mt-0.5">${modeLabel}</div>
+                    <div id="custom-countdown-${cd.id}" class="countdown-value text-lg sm:text-xl md:text-2xl font-semibold tracking-wide ${appSettings.countdownDigitFont}">00d 00h 00m 00s</div>
+                    <div class="text-[10px] text-gray-500 mt-0.5">${cd.mode === 'countup' ? 'Since' : 'Until'}</div>
                 `;
-                container.appendChild(card);
+                // Insert before the resize handle if present
+                const handle = container.querySelector('.resize-handle');
+                if (handle) container.insertBefore(card, handle);
+                else container.appendChild(card);
             });
         }
 
         /* ==========================================
-           11. MODAL & PREFERENCES CONTROLLER
+           10. LAYOUT EDIT MODE (double-click)
+           ========================================== */
+        const MOVABLE_KEYS = ['clock', 'countdowns', 'factBox', 'marquee'];
+        const MOVABLE_SELECTORS = {
+            clock: '#clockContainer',
+            countdowns: '#countdownContainer',
+            factBox: '#factBox',
+            marquee: '#footerTicker'
+        };
+
+        function enterLayoutEditMode() {
+            if (layoutEditMode) return;
+            // Don't enter if settings modal is open
+            if (!document.getElementById('settingsModal').classList.contains('opacity-0')) return;
+            layoutEditMode = true;
+            document.body.classList.add('layout-edit-mode');
+            document.body.classList.remove('hide-controls');
+            clearTimeout(idleTimer);
+        }
+
+        function exitLayoutEditMode() {
+            if (!layoutEditMode) return;
+            layoutEditMode = false;
+            document.body.classList.remove('layout-edit-mode');
+            // Persist
+            try {
+                localStorage.setItem('cb_screensaver_settings', JSON.stringify(appSettings));
+            } catch (e) {}
+            resetIdleTimer();
+        }
+
+        function resetLayoutPositions() {
+            appSettings.layout = { clock: null, countdowns: null, factBox: null, marquee: null };
+            applyLayoutPositions();
+            try {
+                localStorage.setItem('cb_screensaver_settings', JSON.stringify(appSettings));
+            } catch (e) {}
+        }
+
+        function applyLayoutPositions() {
+            MOVABLE_KEYS.forEach(key => {
+                const el = document.querySelector(MOVABLE_SELECTORS[key]);
+                if (!el) return;
+                const pos = appSettings.layout?.[key];
+                if (pos && (pos.left != null || pos.top != null)) {
+                    el.classList.add('absolute-pos');
+                    el.style.left = pos.left != null ? pos.left + 'px' : '';
+                    el.style.top = pos.top != null ? pos.top + 'px' : '';
+                    el.style.right = 'auto';
+                    el.style.bottom = 'auto';
+                    if (pos.scale) {
+                        el.style.transform = `scale(${pos.scale})`;
+                        el.style.transformOrigin = 'top left';
+                    } else {
+                        el.style.transform = '';
+                    }
+                    if (pos.width) el.style.width = pos.width + 'px';
+                } else {
+                    el.classList.remove('absolute-pos');
+                    el.style.left = '';
+                    el.style.top = '';
+                    el.style.right = '';
+                    el.style.bottom = '';
+                    el.style.transform = '';
+                    el.style.width = '';
+                    el.style.transformOrigin = '';
+                }
+            });
+        }
+
+        // Drag + resize state
+        let dragState = null;
+
+        function onPointerDown(e) {
+            if (!layoutEditMode) return;
+            // Ignore if clicking inside modal or toolbar or buttons
+            if (e.target.closest('#settingsModal') || e.target.closest('#layoutToolbar') || e.target.closest('button')) return;
+
+            const resizeHandle = e.target.closest('.resize-handle');
+            if (resizeHandle) {
+                const key = resizeHandle.getAttribute('data-resize');
+                const el = document.querySelector(MOVABLE_SELECTORS[key]);
+                if (!el) return;
+                e.preventDefault();
+                e.stopPropagation();
+                const rect = el.getBoundingClientRect();
+                const scale = appSettings.layout?.[key]?.scale || 1;
+                dragState = {
+                    type: 'resize',
+                    key,
+                    el,
+                    startX: e.clientX,
+                    startY: e.clientY,
+                    startScale: scale,
+                    startWidth: rect.width / scale
+                };
+                el.classList.add('dragging');
+                return;
+            }
+
+            const movable = e.target.closest('.movable');
+            if (!movable) return;
+            const key = movable.getAttribute('data-movable');
+            if (!key) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            // If still in flow layout, convert to absolute using current rect
+            if (!movable.classList.contains('absolute-pos')) {
+                const rect = movable.getBoundingClientRect();
+                movable.classList.add('absolute-pos');
+                movable.style.left = rect.left + 'px';
+                movable.style.top = rect.top + 'px';
+                movable.style.width = rect.width + 'px';
+                if (!appSettings.layout) appSettings.layout = {};
+                appSettings.layout[key] = {
+                    left: rect.left,
+                    top: rect.top,
+                    width: rect.width,
+                    scale: 1
+                };
+            }
+
+            const startLeft = parseFloat(movable.style.left) || 0;
+            const startTop = parseFloat(movable.style.top) || 0;
+
+            dragState = {
+                type: 'move',
+                key,
+                el: movable,
+                startX: e.clientX,
+                startY: e.clientY,
+                startLeft,
+                startTop
+            };
+            movable.classList.add('dragging');
+        }
+
+        function onPointerMove(e) {
+            if (!dragState) return;
+            e.preventDefault();
+            const dx = e.clientX - dragState.startX;
+            const dy = e.clientY - dragState.startY;
+
+            if (dragState.type === 'move') {
+                const newLeft = dragState.startLeft + dx;
+                const newTop = dragState.startTop + dy;
+                dragState.el.style.left = newLeft + 'px';
+                dragState.el.style.top = newTop + 'px';
+            } else if (dragState.type === 'resize') {
+                // Scale based on distance from start
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const sign = (dx + dy) >= 0 ? 1 : -1;
+                let newScale = dragState.startScale + sign * (dist / 300);
+                newScale = Math.max(0.4, Math.min(2.5, newScale));
+                dragState.el.style.transform = `scale(${newScale})`;
+                dragState.el.style.transformOrigin = 'top left';
+                dragState.currentScale = newScale;
+            }
+        }
+
+        function onPointerUp(e) {
+            if (!dragState) return;
+            const { key, el, type } = dragState;
+            el.classList.remove('dragging');
+
+            if (!appSettings.layout) appSettings.layout = {};
+            if (!appSettings.layout[key]) appSettings.layout[key] = {};
+
+            if (type === 'move') {
+                appSettings.layout[key].left = parseFloat(el.style.left) || 0;
+                appSettings.layout[key].top = parseFloat(el.style.top) || 0;
+                if (el.style.width) appSettings.layout[key].width = parseFloat(el.style.width);
+            } else if (type === 'resize') {
+                appSettings.layout[key].scale = dragState.currentScale || appSettings.layout[key].scale || 1;
+            }
+
+            dragState = null;
+        }
+
+        document.addEventListener('pointerdown', onPointerDown);
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', onPointerUp);
+        document.addEventListener('pointercancel', onPointerUp);
+
+        // Double-click to toggle layout mode
+        document.addEventListener('dblclick', (e) => {
+            // Ignore double-clicks on interactive controls / modal
+            if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select') ||
+                e.target.closest('#settingsModal') || e.target.closest('#layoutToolbar') ||
+                e.target.closest('a')) return;
+
+            if (layoutEditMode) {
+                exitLayoutEditMode();
+            } else {
+                enterLayoutEditMode();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && layoutEditMode) {
+                exitLayoutEditMode();
+            }
+        });
+
+        /* ==========================================
+           11. MODAL / SETTINGS
            ========================================== */
         function toggleSettingsModal() {
             const modal = document.getElementById('settingsModal');
             const isHidden = modal.classList.contains('opacity-0');
-
             if (isHidden) {
+                if (layoutEditMode) exitLayoutEditMode();
                 document.getElementById('inputMarquee').value = appSettings.marqueeText;
                 document.getElementById('selectClockFont').value = appSettings.clockFont;
                 document.getElementById('selectCountdownLabelFont').value = appSettings.countdownLabelFont;
                 document.getElementById('selectCountdownDigitFont').value = appSettings.countdownDigitFont;
                 document.getElementById('selectFactFont').value = appSettings.factFont;
                 document.getElementById('selectMarqueeFont').value = appSettings.marqueeFont;
-
                 document.getElementById('inputClockColor').value = appSettings.clockColor;
                 document.getElementById('clockColorHex').textContent = appSettings.clockColor;
-
                 document.getElementById('inputCountdownColor').value = appSettings.countdownColor;
                 document.getElementById('countdownColorHex').textContent = appSettings.countdownColor;
-
                 document.getElementById('inputFactColor').value = appSettings.factColor;
                 document.getElementById('factColorHex').textContent = appSettings.factColor;
-
                 document.getElementById('inputMarqueeColor').value = appSettings.marqueeColor;
                 document.getElementById('marqueeColorHex').textContent = appSettings.marqueeColor;
-
                 document.getElementById('inputSnowDensity').value = appSettings.snowDensity;
                 document.getElementById('snowDensityVal').textContent = appSettings.snowDensity;
-
                 document.getElementById('inputSnowSpeed').value = appSettings.snowSpeed;
                 document.getElementById('snowSpeedVal').textContent = `${appSettings.snowSpeed}x`;
-
                 document.getElementById('inputMarqueeSpeed').value = appSettings.marqueeSpeed;
                 document.getElementById('marqueeSpeedVal').textContent = `${appSettings.marqueeSpeed}s`;
-
                 document.getElementById('selectGlow').value = appSettings.glowStyle;
                 document.getElementById('toggleFact').checked = appSettings.showFact;
                 document.getElementById('toggleMarquee').checked = appSettings.showMarquee;
-
                 document.getElementById('toggleHolidayThemes').checked = appSettings.enableHolidayThemes;
                 document.getElementById('inputHalloweenStart').value = appSettings.halloweenStart;
                 document.getElementById('inputHalloweenEnd').value = appSettings.halloweenEnd;
@@ -1479,11 +1428,9 @@
                 document.getElementById('inputBirthdayEnd').value = appSettings.birthdayEnd;
                 document.getElementById('inputNewYearStart').value = appSettings.newYearStart || "12-31";
                 document.getElementById('inputNewYearEnd').value = appSettings.newYearEnd || "01-01";
-
                 renderSnowColorsList();
                 renderCustomCountdownsList();
                 updateFontBadges();
-
                 modal.classList.remove('opacity-0', 'pointer-events-none');
             } else {
                 modal.classList.add('opacity-0', 'pointer-events-none');
@@ -1493,39 +1440,27 @@
         function applyGlobalFont() {
             const selectedFont = document.getElementById('selectGlobalFont').value;
             if (!selectedFont) return;
-
-            document.getElementById('selectClockFont').value = selectedFont;
-            document.getElementById('selectCountdownLabelFont').value = selectedFont;
-            document.getElementById('selectCountdownDigitFont').value = selectedFont;
-            document.getElementById('selectFactFont').value = selectedFont;
-            document.getElementById('selectMarqueeFont').value = selectedFont;
-
+            ['selectClockFont', 'selectCountdownLabelFont', 'selectCountdownDigitFont', 'selectFactFont', 'selectMarqueeFont'].forEach(id => {
+                document.getElementById(id).value = selectedFont;
+            });
             updateFontBadges();
         }
 
         function bindModalLiveInputs() {
-            document.getElementById('inputSnowDensity').addEventListener('input', (e) => {
-                document.getElementById('snowDensityVal').textContent = e.target.value;
-            });
-            document.getElementById('inputSnowSpeed').addEventListener('input', (e) => {
-                document.getElementById('snowSpeedVal').textContent = `${e.target.value}x`;
-            });
-            document.getElementById('inputMarqueeSpeed').addEventListener('input', (e) => {
-                document.getElementById('marqueeSpeedVal').textContent = `${e.target.value}s`;
-            });
+            document.getElementById('inputSnowDensity').addEventListener('input', e => document.getElementById('snowDensityVal').textContent = e.target.value);
+            document.getElementById('inputSnowSpeed').addEventListener('input', e => document.getElementById('snowSpeedVal').textContent = `${e.target.value}x`);
+            document.getElementById('inputMarqueeSpeed').addEventListener('input', e => document.getElementById('marqueeSpeedVal').textContent = `${e.target.value}s`);
+            document.getElementById('inputClockColor').addEventListener('input', e => document.getElementById('clockColorHex').textContent = e.target.value);
+            document.getElementById('inputCountdownColor').addEventListener('input', e => document.getElementById('countdownColorHex').textContent = e.target.value);
+            document.getElementById('inputFactColor').addEventListener('input', e => document.getElementById('factColorHex').textContent = e.target.value);
+            document.getElementById('inputMarqueeColor').addEventListener('input', e => document.getElementById('marqueeColorHex').textContent = e.target.value);
 
-            document.getElementById('inputClockColor').addEventListener('input', (e) => {
-                document.getElementById('clockColorHex').textContent = e.target.value;
-            });
-            document.getElementById('inputCountdownColor').addEventListener('input', (e) => {
-                document.getElementById('countdownColorHex').textContent = e.target.value;
-            });
-            document.getElementById('inputFactColor').addEventListener('input', (e) => {
-                document.getElementById('factColorHex').textContent = e.target.value;
-            });
-            document.getElementById('inputMarqueeColor').addEventListener('input', (e) => {
-                document.getElementById('marqueeColorHex').textContent = e.target.value;
-            });
+            // Date picker sync
+            const picker = document.getElementById('inputCustomDatePicker');
+            const text = document.getElementById('inputCustomDate');
+            if (picker && text) {
+                picker.addEventListener('change', () => { if (picker.value) text.value = picker.value; });
+            }
         }
 
         function saveAndApplySettings() {
@@ -1535,20 +1470,16 @@
             appSettings.countdownDigitFont = document.getElementById('selectCountdownDigitFont').value;
             appSettings.factFont = document.getElementById('selectFactFont').value;
             appSettings.marqueeFont = document.getElementById('selectMarqueeFont').value;
-
             appSettings.clockColor = document.getElementById('inputClockColor').value;
             appSettings.countdownColor = document.getElementById('inputCountdownColor').value;
             appSettings.factColor = document.getElementById('inputFactColor').value;
             appSettings.marqueeColor = document.getElementById('inputMarqueeColor').value;
-
             appSettings.snowDensity = parseInt(document.getElementById('inputSnowDensity').value);
             appSettings.snowSpeed = parseFloat(document.getElementById('inputSnowSpeed').value);
             appSettings.marqueeSpeed = parseInt(document.getElementById('inputMarqueeSpeed').value);
-
             appSettings.glowStyle = document.getElementById('selectGlow').value;
             appSettings.showFact = document.getElementById('toggleFact').checked;
             appSettings.showMarquee = document.getElementById('toggleMarquee').checked;
-
             appSettings.enableHolidayThemes = document.getElementById('toggleHolidayThemes').checked;
             appSettings.halloweenStart = document.getElementById('inputHalloweenStart').value.trim() || "10-24";
             appSettings.halloweenEnd = document.getElementById('inputHalloweenEnd').value.trim() || "10-31";
@@ -1559,13 +1490,9 @@
             appSettings.newYearStart = document.getElementById('inputNewYearStart').value.trim() || "12-31";
             appSettings.newYearEnd = document.getElementById('inputNewYearEnd').value.trim() || "01-01";
 
-            // customCountdowns already live in appSettings from add/remove
-
             try {
                 localStorage.setItem('cb_screensaver_settings', JSON.stringify(appSettings));
-            } catch (e) {
-                console.warn('Unable to save settings to localStorage', e);
-            }
+            } catch (e) { console.warn(e); }
 
             applySettingsToUI();
             toggleSettingsModal();
@@ -1573,9 +1500,7 @@
 
         function resetSettingsToDefault() {
             appSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
-            try {
-                localStorage.removeItem('cb_screensaver_settings');
-            } catch (e) {}
+            try { localStorage.removeItem('cb_screensaver_settings'); } catch (e) {}
             applySettingsToUI();
             toggleSettingsModal();
         }
@@ -1586,12 +1511,12 @@
                 if (stored) {
                     const parsed = JSON.parse(stored);
                     appSettings = { ...DEFAULT_SETTINGS, ...parsed };
-                    // Ensure arrays exist
                     if (!Array.isArray(appSettings.customCountdowns)) appSettings.customCountdowns = [];
                     if (!Array.isArray(appSettings.snowColors)) appSettings.snowColors = ["#ffffff"];
+                    if (!appSettings.layout) appSettings.layout = { clock: null, countdowns: null, factBox: null, marquee: null };
                 }
             } catch (e) {
-                appSettings = { ...DEFAULT_SETTINGS };
+                appSettings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
             }
             applySettingsToUI();
         }
@@ -1599,91 +1524,74 @@
         function renderMarqueeText(paletteColors) {
             let baseText = appSettings.marqueeText;
             let repeatedText = baseText;
-            while (repeatedText.length < 150) {
-                repeatedText += " • " + baseText;
-            }
-
+            while (repeatedText.length < 150) repeatedText += " • " + baseText;
             let words = repeatedText.split(/(\s+)/);
             let htmlContent = "";
             let colorIndex = 0;
-            
-            for (let i = 0; i < words.length; i++) {
-                let word = words[i];
+            for (let word of words) {
                 if (/^\s+$/.test(word)) {
                     htmlContent += word.replace(/ /g, "&nbsp;");
                     continue;
                 }
-                let currentColor = paletteColors[colorIndex % paletteColors.length];
-                htmlContent += `<span style="color: ${currentColor}">${word}</span>`;
+                htmlContent += `<span style="color:${paletteColors[colorIndex % paletteColors.length]}">${word}</span>`;
                 colorIndex++;
             }
-
             const text1 = document.getElementById('marqueeText1');
             const text2 = document.getElementById('marqueeText2');
             const wrapper = document.getElementById('marqueeWrapper');
-
             text1.innerHTML = htmlContent;
             text2.innerHTML = htmlContent;
-
             text1.className = `text-xs sm:text-sm md:text-base tracking-widest font-light pr-12 ${appSettings.marqueeFont}`;
             text2.className = `text-xs sm:text-sm md:text-base tracking-widest font-light pr-12 ${appSettings.marqueeFont}`;
-
             wrapper.style.animationDuration = `${appSettings.marqueeSpeed}s`;
         }
 
         function applySettingsToUI() {
             const clockEl = document.getElementById('clockContainer');
-            clockEl.className = `flex flex-col items-center md:items-end text-center md:text-right transition-all w-full ${appSettings.clockFont}`;
+            clockEl.className = `movable flex flex-col items-center md:items-end text-center md:text-right transition-all w-full ${appSettings.clockFont}`;
+            clockEl.setAttribute('data-movable', 'clock');
 
             const timeDisplay = document.getElementById('timeDisplay');
             timeDisplay.className = `text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-none whitespace-nowrap ${appSettings.glowStyle}`;
 
-            const countdownLabels = document.querySelectorAll('.countdown-label');
-            countdownLabels.forEach(lbl => {
+            document.querySelectorAll('.countdown-label').forEach(lbl => {
                 lbl.className = `countdown-label text-xs uppercase tracking-widest font-semibold flex items-center gap-2 ${appSettings.countdownLabelFont}`;
                 lbl.style.color = appSettings.countdownColor;
             });
-
-            const countdownValues = document.querySelectorAll('.countdown-value');
-            countdownValues.forEach(val => {
+            document.querySelectorAll('.countdown-value').forEach(val => {
                 val.className = `countdown-value text-lg sm:text-xl md:text-2xl font-semibold tracking-wide ${appSettings.countdownDigitFont}`;
                 val.style.color = appSettings.countdownColor;
             });
 
             const factBox = document.getElementById('factBox');
-            factBox.className = `max-w-xl text-center bg-black/40 backdrop-blur-md border border-white/10 px-5 py-2.5 rounded-2xl shadow-2xl transition-all duration-300 hover:border-white/20 ${appSettings.factFont}`;
+            factBox.className = `movable max-w-xl text-center bg-black/40 backdrop-blur-md border border-white/10 px-5 py-2.5 rounded-2xl shadow-2xl transition-all duration-300 hover:border-white/20 ${appSettings.factFont}`;
+            factBox.setAttribute('data-movable', 'factBox');
+            document.getElementById('factHeader').style.color = appSettings.factColor;
+            document.getElementById('factDisplay').style.color = appSettings.factColor;
+            factBox.style.display = appSettings.showFact ? 'block' : 'none';
 
-            const factHeader = document.getElementById('factHeader');
-            factHeader.style.color = appSettings.factColor;
-
-            const factDisplay = document.getElementById('factDisplay');
-            factDisplay.style.color = appSettings.factColor;
-
-            document.getElementById('factBox').style.display = appSettings.showFact ? 'block' : 'none';
-            document.getElementById('footerTicker').parentElement.style.display = appSettings.showMarquee ? 'flex' : 'none';
+            const footerParent = document.getElementById('footerTicker').parentElement;
+            footerParent.style.display = appSettings.showMarquee ? 'flex' : 'none';
 
             renderCustomCountdownCards();
+            applyLayoutPositions();
             updateClockAndCountdowns();
             initSnowflakes();
         }
 
         /* ==========================================
-           12. APPLICATION INITIALIZATION
+           12. INIT
            ========================================== */
         window.onload = function () {
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
-
             loadSettingsFromStorage();
             bindModalLiveInputs();
-
             updateDailyFact();
             updateClockAndCountdowns();
-
             setInterval(updateClockAndCountdowns, 1000);
             renderSnow();
             resetIdleTimer();
-
             requestWakeLock();
         };
     </script>
